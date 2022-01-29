@@ -35,10 +35,15 @@ func main() {
 	routeAll := mux.NewRouter()
 	routes.GetAllHandlers(routeAll)
 	routeAll.Use(mw)
-
-	APP_IP := os.Getenv("APP_IP")
-	APP_PORT := os.Getenv("APP_PORT")
-	fmt.Println(APP_IP + ":" + APP_PORT)
+	var APP_IP, APP_PORT string
+	if IsOpeningLocal {
+		APP_IP = "127.0.0.1"
+		APP_PORT = "8080"
+	} else {
+		APP_IP = os.Getenv("APP_IP")
+		APP_PORT = os.Getenv("APP_PORT")
+	}
+	fmt.Println("[SERVER] Server address is " + APP_IP + ":" + APP_PORT)
 	//	go http.ListenAndServeTLS(APP_IP+":"+APP_PORT, "cert.crt", "key.key", nil)
 	http.ListenAndServe(APP_IP+":"+APP_PORT, nil)
 	fmt.Println("[SERVER] Server is started")
