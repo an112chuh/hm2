@@ -1,11 +1,15 @@
 package routes
 
-import "github.com/gorilla/mux"
+import (
+	"hm2/managers"
 
-func GetAllHandlers(r *mux.Router) {
-	GetManagerHandlers(r)
-}
+	"github.com/gorilla/mux"
+)
 
 func GetManagerHandlers(r *mux.Router) {
+	GetManagerAuthHandlers(r)
+}
 
+func GetManagerAuthHandlers(r *mux.Router) {
+	r.HandleFunc("/api/login", managers.Login)
 }
