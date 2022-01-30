@@ -1,17 +1,15 @@
 package main
 
 import (
-	"database/sql"
 	"encoding/gob"
 	"fmt"
-	"hm2/inits"
+	"hm2/config"
 	"hm2/routes"
 	"net/http"
 	"os"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
-	"github.com/gorilla/sessions"
 )
 
 type User struct {
@@ -20,18 +18,16 @@ type User struct {
 	Authenticated bool
 }
 
-var store *sessions.CookieStore
-var db *sql.DB
+var IsOpeningLocal bool
 
 func main() {
-	IsOpeningLocal := false
+	IsOpeningLocal = false
 	if len(os.Args) == 2 {
 		IsOpeningLocal = true
 	}
-	db = inits.InitDB(IsOpeningLocal)
-	store = inits.InitCookies()
+	config.InitDB(IsOpeningLocal)
+	config.InitCookies()
 	gob.Register(User{})
-
 	routeAll := mux.NewRouter()
 	routes.GetAllHandlers(routeAll)
 	routeAll.Use(mw)
@@ -47,7 +43,7 @@ func main() {
 	//	go http.ListenAndServeTLS(APP_IP+":"+APP_PORT, "cert.crt", "key.key", nil)
 	http.ListenAndServe(APP_IP+":"+APP_PORT, nil)
 	fmt.Println("[SERVER] Server is started")
-	defer db.Close()
+	defer config.Db.Close()
 }
 
 func mw(next http.Handler) http.Handler {

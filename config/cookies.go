@@ -1,4 +1,4 @@
-package inits
+package config
 
 import (
 	"hm2/constants"
@@ -6,16 +6,17 @@ import (
 	"github.com/gorilla/sessions"
 )
 
-func InitCookies() (store *sessions.CookieStore) {
+var Store *sessions.CookieStore
+
+func InitCookies() {
 	constants.SetCookies()
-	store = sessions.NewCookieStore(
+	Store = sessions.NewCookieStore(
 		constants.Cookies.AuthKeyOne,
 		constants.Cookies.EncryptionOne,
 	)
-	store.Options = &sessions.Options{
+	Store.Options = &sessions.Options{
 		Path:     "/",
 		MaxAge:   60 * 30000,
 		HttpOnly: true,
 	}
-	return store
 }
