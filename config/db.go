@@ -1,14 +1,14 @@
 package config
 
 import (
-	"database/sql"
 	"hm2/constants"
 	"log"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/jmoiron/sqlx"
 )
 
-var Db *sql.DB
+var Db *sqlx.DB
 
 func InitDB(IsLocal bool) {
 	var err error
@@ -29,12 +29,12 @@ func InitDB(IsLocal bool) {
 	}
 }
 
-func InitDBLocal(NameDB constants.AuthDB) (db *sql.DB, err error) {
-	db, err = sql.Open(NameDB.DBType, NameDB.Login+":"+NameDB.Password+"@/"+NameDB.DBName)
+func InitDBLocal(NameDB constants.AuthDB) (db *sqlx.DB, err error) {
+	db, err = sqlx.Open(NameDB.DBType, NameDB.Login+":"+NameDB.Password+"@/"+NameDB.DBName)
 	return db, err
 }
 
-func InitDBGlobal(NameDB constants.AuthDB) (db *sql.DB, err error) {
-	db, err = sql.Open(NameDB.DBType, NameDB.Login+":"+NameDB.Password+"@"+NameDB.ConnectionExtra+"/"+NameDB.DBName)
+func InitDBGlobal(NameDB constants.AuthDB) (db *sqlx.DB, err error) {
+	db, err = sqlx.Open(NameDB.DBType, NameDB.Login+":"+NameDB.Password+"@"+NameDB.ConnectionExtra+"/"+NameDB.DBName)
 	return db, err
 }
