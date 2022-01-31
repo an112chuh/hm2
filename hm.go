@@ -12,12 +12,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-type User struct {
-	Username      string
-	ID            int
-	Authenticated bool
-}
-
 var IsOpeningLocal bool
 
 func main() {
@@ -25,12 +19,17 @@ func main() {
 	if len(os.Args) == 2 {
 		IsOpeningLocal = true
 	}
+
 	config.InitDB(IsOpeningLocal)
 	config.InitCookies()
-	gob.Register(User{})
+	config.InitLoggers()
+
+	gob.Register(config.User{})
+
 	routeAll := mux.NewRouter()
 	routes.GetAllHandlers(routeAll)
 	routeAll.Use(mw)
+
 	var APP_IP, APP_PORT string
 	if IsOpeningLocal {
 		APP_IP = "127.0.0.1"
@@ -39,10 +38,12 @@ func main() {
 		APP_IP = os.Getenv("APP_IP")
 		APP_PORT = os.Getenv("APP_PORT")
 	}
+
 	fmt.Println("[SERVER] Server address is " + APP_IP + ":" + APP_PORT)
 	//	go http.ListenAndServeTLS(APP_IP+":"+APP_PORT, "cert.crt", "key.key", nil)
 	http.ListenAndServe(APP_IP+":"+APP_PORT, nil)
 	fmt.Println("[SERVER] Server is started")
+
 	defer config.Db.Close()
 }
 
