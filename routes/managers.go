@@ -19,7 +19,8 @@ func GetManagerChangeHandlers(r *mux.Router) {
 }
 
 func GetManagerAuthHandlers(r *mux.Router) {
-	r.HandleFunc("/api/login", managers.Login).Methods("POST")
+	r.HandleFunc("/api/login", managers.LoginHandler).Methods("POST")
+	r.HandleFunc("/api/logout", managers.DeleteManagerHandler)
 }
 
 func GetManagerProfileHandlers(r *mux.Router) {

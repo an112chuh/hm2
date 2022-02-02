@@ -14,7 +14,7 @@ import (
 	"github.com/gorilla/sessions"
 )
 
-type ManagerLogin struct {
+type ManagerReg struct {
 	Mail           string `json:"mail"`
 	Login          string `json:"login"`
 	Password       string `json:"password"`
@@ -30,7 +30,7 @@ func RegManagerHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	var data ManagerLogin
+	var data ManagerReg
 	b, _ := io.ReadAll(r.Body)
 	r.Body = io.NopCloser(bytes.NewReader(b))
 	err = json.Unmarshal(b, &data)
@@ -73,7 +73,7 @@ func DeleteManagerHandler(w http.ResponseWriter, r *http.Request) {
 	result.ReturnJSON(w, &res)
 }
 
-func RegManager(r *http.Request, data ManagerLogin) (res result.ResultInfo, user config.User) {
+func RegManager(r *http.Request, data ManagerReg) (res result.ResultInfo, user config.User) {
 	if data.Password != data.PasswordRepeat {
 		res = result.SetErrorResult(`Поля "пароль" и "введите пароль" не совпадают`)
 		return
@@ -133,7 +133,7 @@ func DeleteManager(r *http.Request, id int) (res result.ResultInfo) {
 	return res
 }
 
-func CreateManager(r *http.Request, data ManagerLogin) (res result.ResultInfo, ID int) {
+func CreateManager(r *http.Request, data ManagerReg) (res result.ResultInfo, ID int) {
 	db := config.ConnectDB()
 	Hash := HashCreation(data.Password)
 	t := time.Now()

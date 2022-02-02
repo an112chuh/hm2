@@ -100,3 +100,20 @@ User-Agent: PostmanRuntime/7.29.0
 
 ERROR 2022/02/02 13:14:11 report.go:44: ——————————————————————————————————————————————————————————————————————
 ERROR 2022/02/02 13:14:11 report.go:45: 
+ERROR 2022/02/02 20:48:34 report.go:55: 02.02.2022 20:48:34
+D:/hm2/managers/auth.go:30
+invalid character '}' looking for beginning of object key string
+
+POST /api/login HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 54
+Content-Type: text/plain
+Postman-Token: 651ac63b-475c-477b-9fea-f09cac61820d
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/02 20:48:34 report.go:56: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/02 20:48:34 report.go:57: 
