@@ -29,6 +29,7 @@ func main() {
 	routeAll := mux.NewRouter()
 	routes.GetAllHandlers(routeAll)
 	routeAll.Use(mw)
+	http.Handle("/", routeAll)
 
 	var APP_IP, APP_PORT string
 	if IsOpeningLocal {

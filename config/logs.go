@@ -12,10 +12,11 @@ var AccessLog *log.Logger
 
 type User struct {
 	Username      string
-	ID            int
+	ID            int `json:"id"`
 	Authenticated bool
-	UserLog       *log.Logger
 }
+
+var UserLogs = map[int]*log.Logger{}
 
 func InitLoggers() {
 	ErrorFile := &lumberjack.Logger{
@@ -28,13 +29,13 @@ func InitLoggers() {
 	AccessLog = log.New(ErrorFile, "SERVER ", log.Ldate|log.Ltime)
 }
 
-func InitUserLogger(id int) (UsersLog *log.Logger) {
+func InitUserLogger(id int) {
 	UserLogFile := &lumberjack.Logger{
 		Filename:   "./logs/users/user_" + strconv.Itoa(id) + ".log",
 		MaxSize:    250,
 		MaxBackups: 5,
 		MaxAge:     10,
 	}
-	UsersLog = log.New(UserLogFile, "USER: ", log.Ldate|log.Ltime)
-	return UsersLog
+	UsersLog := log.New(UserLogFile, "USER: ", log.Ldate|log.Ltime)
+	UserLogs[id] = UsersLog
 }

@@ -11,5 +11,6 @@ func GetManagerHandlers(r *mux.Router) {
 }
 
 func GetManagerAuthHandlers(r *mux.Router) {
-	r.HandleFunc("/api/login", managers.Login)
+	r.HandleFunc("/api/login", managers.Login).Methods("POST")
+	r.HandleFunc("/api/register", managers.RegManagerHandler).Methods("POST")
 }

@@ -1,0 +1,102 @@
+ERROR 2022/02/02 12:38:09 report.go:43: 02.02.2022 12:38:09
+D:/hm2/managers/profile.go:37
+invalid character '"' after object key:value pair
+
+POST /api/register HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 120
+Content-Type: text/plain
+Postman-Token: efefbf09-351f-41b5-a067-2bb05698edff
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/02 12:38:09 report.go:44: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/02 12:38:09 report.go:45: 
+ERROR 2022/02/02 12:38:09 report.go:43: 02.02.2022 12:38:09
+D:/hm2/managers/profile.go:93
+pq: SSL is not enabled on the server
+
+POST /api/register HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 120
+Content-Type: text/plain
+Postman-Token: efefbf09-351f-41b5-a067-2bb05698edff
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/02 12:38:09 report.go:44: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/02 12:38:09 report.go:45: 
+ERROR 2022/02/02 12:45:49 report.go:43: 02.02.2022 12:45:49
+D:/hm2/managers/profile.go:37
+invalid character '"' after object key:value pair
+
+POST /api/register HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 120
+Content-Type: text/plain
+Postman-Token: ab8accd0-ef5a-47a2-a1cd-c2283f87f575
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/02 12:45:49 report.go:44: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/02 12:45:49 report.go:45: 
+ERROR 2022/02/02 12:45:49 report.go:43: 02.02.2022 12:45:49
+D:/hm2/managers/profile.go:93
+pq: SSL is not enabled on the server
+
+POST /api/register HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 120
+Content-Type: text/plain
+Postman-Token: ab8accd0-ef5a-47a2-a1cd-c2283f87f575
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/02 12:45:49 report.go:44: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/02 12:45:49 report.go:45: 
+ERROR 2022/02/02 12:48:17 report.go:43: 02.02.2022 12:48:17
+D:/hm2/managers/profile.go:93
+pq: SSL is not enabled on the server
+
+POST /api/register HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 123
+Content-Type: text/plain
+Postman-Token: 055cf76d-e096-4445-83ec-4404a89e18ef
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/02 12:48:17 report.go:44: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/02 12:48:17 report.go:45: 
+ERROR 2022/02/02 13:14:11 report.go:43: 02.02.2022 13:14:11
+D:/hm2/managers/profile.go:43
+securecookie: error - caused by: securecookie: error - caused by: gob: type log.Logger has no exported fields
+
+POST /api/register HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 123
+Content-Type: text/plain
+Postman-Token: 9a128384-93b8-42f3-bb53-cc8b1a38597a
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/02 13:14:11 report.go:44: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/02 13:14:11 report.go:45: 

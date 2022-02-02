@@ -15,7 +15,7 @@ import (
 )
 
 func UserLog(m string, User config.User) {
-	User.UserLog.Printf(m)
+	config.UserLogs[User.ID].Printf(m)
 }
 
 func ErrorServer(r *http.Request, err error) {

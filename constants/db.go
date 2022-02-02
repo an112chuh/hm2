@@ -4,6 +4,8 @@ type AuthDB struct {
 	Login           string
 	Password        string
 	DBType          string
+	Port            string
+	Host            string
 	DBName          string
 	ConnectionExtra string
 }
@@ -12,9 +14,12 @@ var ConnectionLocal AuthDB
 var ConnectionServer AuthDB
 
 func SetConnectionConstantsLocal() {
-	ConnectionLocal.Login = "root"
-	ConnectionLocal.Password = "qwerty"
-	ConnectionLocal.DBType = "mysql"
+	ConnectionLocal.Login = "postgres"
+	ConnectionLocal.Password = "derwes"
+	ConnectionLocal.DBType = "postgres"
+	ConnectionLocal.Host = "localhost"
+	ConnectionLocal.Port = "5432"
+	ConnectionLocal.DBName = "hm"
 }
 
 func SetConnectionConstantsGlobal() {
