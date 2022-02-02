@@ -24,5 +24,6 @@ func GetManagerAuthHandlers(r *mux.Router) {
 }
 
 func GetManagerProfileHandlers(r *mux.Router) {
-
+	r.HandleFunc("/api/profile/{id:[0-9]+}", managers.ProfileHandler).Methods("GET")
+	r.HandleFunc("/api/profile/{id:[0-9]+}", managers.EditProfileHandler).Methods("PUT")
 }
