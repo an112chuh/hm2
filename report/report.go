@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/kaibox-git/sqlparams"
 	"github.com/lib/pq"
 )
 
@@ -22,6 +23,17 @@ func ErrorServer(r *http.Request, err error) {
 	var FileWithLineNum = FileWithLineNum()
 	fmt.Printf("\n%s\n%s\n", FileWithLineNum, err.Error())
 	m := createMessage(r, FileWithLineNum, err, "")
+	go logError(m)
+}
+
+func ErrorSQLServer(r *http.Request, err error, query string, params ...interface{}) {
+	var FileWithLineNum = FileWithLineNum()
+	if err == nil {
+		fmt.Printf("\n%s\n%s\n", FileWithLineNum, sqlparams.Inline(query, params...))
+		return
+	}
+	fmt.Printf("\n%s:\n%s\n%s\n", FileWithLineNum, err.Error(), sqlparams.Inline(query, params...))
+	m := createMessage(r, FileWithLineNum, err, sqlparams.Inline(query, params...))
 	go logError(m)
 }
 

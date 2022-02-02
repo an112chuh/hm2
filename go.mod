@@ -9,6 +9,7 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/gorilla/securecookie v1.1.1 // indirect
 	github.com/jmoiron/sqlx v1.3.4
+	github.com/kaibox-git/sqlparams v1.0.1
 	github.com/lib/pq v1.10.4
 	github.com/rs/zerolog v1.26.1
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
