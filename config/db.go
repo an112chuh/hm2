@@ -11,10 +11,10 @@ import (
 
 var Db *sqlx.DB
 
-func InitDB(IsLocal bool) {
+func InitDB(IsLocal bool, AdminName string) {
 	var err error
 	if IsLocal {
-		constants.SetConnectionConstantsLocal()
+		constants.SetConnectionConstantsLocal(AdminName)
 		Db, err = InitDBLocal(constants.ConnectionLocal)
 		if err != nil {
 			log.Fatal(`[ERROR] Error in connecting local database: ` + err.Error())

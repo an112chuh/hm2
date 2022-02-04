@@ -15,6 +15,9 @@ func ReturnJSON(w http.ResponseWriter, object Returning) {
 	}
 	Headers(w)
 	_, err = w.Write(ansB)
+	if err != nil {
+		report.ErrorServer(nil, err)
+	}
 }
 
 func Headers(w http.ResponseWriter) {

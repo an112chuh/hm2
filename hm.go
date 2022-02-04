@@ -16,11 +16,13 @@ var IsOpeningLocal bool
 
 func main() {
 	IsOpeningLocal = false
+	var AdminName string
 	if len(os.Args) == 2 {
 		IsOpeningLocal = true
+		AdminName = os.Args[1]
 	}
 
-	config.InitDB(IsOpeningLocal)
+	config.InitDB(IsOpeningLocal, AdminName)
 	config.InitCookies()
 	config.InitLoggers()
 

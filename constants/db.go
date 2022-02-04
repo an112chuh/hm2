@@ -13,13 +13,17 @@ type AuthDB struct {
 var ConnectionLocal AuthDB
 var ConnectionServer AuthDB
 
-func SetConnectionConstantsLocal() {
+func SetConnectionConstantsLocal(AdminName string) {
 	ConnectionLocal.Login = "postgres"
 	ConnectionLocal.Password = "derwes"
 	ConnectionLocal.DBType = "postgres"
 	ConnectionLocal.Host = "localhost"
 	ConnectionLocal.Port = "5432"
-	ConnectionLocal.DBName = "hm"
+	if AdminName == "st411ar" {
+		ConnectionLocal.DBName = "postgres"
+	} else {
+		ConnectionLocal.DBName = "hm"
+	}
 }
 
 func SetConnectionConstantsGlobal() {
