@@ -121,7 +121,7 @@ func RegManager(r *http.Request, data ManagerReg) (res result.ResultInfo, user c
 
 func DeleteManager(r *http.Request, id int) (res result.ResultInfo) {
 	db := config.ConnectDB()
-	query := `UPDATE list.manager_list SET is_active = FALSE WHERE id = $1`
+	query := `UPDATE list.manager_list SET is_active = FALSE, team1 = 0, team2 = 0, team3 = 0 WHERE id = $1`
 	_, err := db.Exec(query, id)
 	if err != nil {
 		report.ErrorSQLServer(r, err, query, id)
