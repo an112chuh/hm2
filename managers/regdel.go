@@ -158,6 +158,13 @@ func CreateManager(r *http.Request, data ManagerReg) (res result.ResultInfo, ID 
 		res = result.SetErrorResult(`Внутренняя ошибка`)
 		return res, -1
 	}
+	query = `INSERT INTO managers.data (id) VALUES ($1)`
+	_, err = db.Exec(query, ID)
+	if err != nil {
+		report.ErrorServer(r, err)
+		res = result.SetErrorResult(`Внутренняя ошибка`)
+		return res, -1
+	}
 	return res, ID
 }
 
@@ -175,4 +182,24 @@ func getUser(s *sessions.Session) config.User {
 		return config.User{Authenticated: false}
 	}
 	return user
+}
+
+func IsLogin(w http.ResponseWriter, r *http.Request) (res bool, user config.User) {
+	res = false
+	session, err := config.Store.Get(r, "cookie-name")
+	if err != nil {
+		report.ErrorServer(r, err)
+		return
+	}
+	user = getUser(session)
+	if auth := user.Authenticated; !auth {
+		err = session.Save(r, w)
+		if err != nil {
+			report.ErrorServer(r, err)
+			return
+		}
+	} else {
+		res = true
+	}
+	return res, user
 }

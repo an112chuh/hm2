@@ -117,3 +117,201 @@ User-Agent: PostmanRuntime/7.29.0
 
 ERROR 2022/02/02 20:48:34 report.go:56: ——————————————————————————————————————————————————————————————————————
 ERROR 2022/02/02 20:48:34 report.go:57: 
+ERROR 2022/02/05 21:26:00 report.go:55: 05.02.2022 21:26:00
+D:/hm2/managers/profile.go:56
+json: cannot unmarshal bool into Go struct field ProfileManagerEdit.sex of type string
+
+PUT /api/profile/edit HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 233
+Content-Type: text/plain
+Cookie: cookie-name=MTY0NDA4NTMzNHw1dkZzMmphbWR5MjRkcjQ0UFJ5Z0VSV0dkNlRJX3VnM1VlcEJtVVNWZk1YUWZiQ0ViMVVVZ3U5RWxnZTJTQkR3OVZZdFdIa2hPM0cwXzZvblNycVFCWld4eFhDeUFodnVuYlVIbzlvSmpqWVl1QmNrSXp2UzZNSmtncE8xUDk3aThCckpvMmlPVmMtSXZLLTk3NkF4YkJMZ0hKVWh4M24xWUtVc3Rjenc0bHF3dWlEb2dVbjdDaDJxb0E9PXwGHt5TN5iwFsLwe7crpRnKA6rvemUvjcgD2Gx-7Zo-9A==
+Postman-Token: 2ed49416-45d3-42cc-81ad-2e5d94298545
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/05 21:26:00 report.go:56: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/05 21:26:00 report.go:57: 
+ERROR 2022/02/05 21:26:00 report.go:55: 05.02.2022 21:26:00
+D:/hm2/managers/profile.go:84
+pq: неверный синтаксис для типа boolean: ""
+
+PUT /api/profile/edit HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 233
+Content-Type: text/plain
+Cookie: cookie-name=MTY0NDA4NTMzNHw1dkZzMmphbWR5MjRkcjQ0UFJ5Z0VSV0dkNlRJX3VnM1VlcEJtVVNWZk1YUWZiQ0ViMVVVZ3U5RWxnZTJTQkR3OVZZdFdIa2hPM0cwXzZvblNycVFCWld4eFhDeUFodnVuYlVIbzlvSmpqWVl1QmNrSXp2UzZNSmtncE8xUDk3aThCckpvMmlPVmMtSXZLLTk3NkF4YkJMZ0hKVWh4M24xWUtVc3Rjenc0bHF3dWlEb2dVbjdDaDJxb0E9PXwGHt5TN5iwFsLwe7crpRnKA6rvemUvjcgD2Gx-7Zo-9A==
+Postman-Token: 2ed49416-45d3-42cc-81ad-2e5d94298545
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/05 21:26:00 report.go:56: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/05 21:26:00 report.go:57: 
+ERROR 2022/02/05 21:39:38 report.go:55: 05.02.2022 21:39:38
+D:/hm2/managers/profile.go:82
+sql: expected 9 destination arguments in Scan, not 1
+
+GET /api/profile/edit HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 233
+Content-Type: text/plain
+Cookie: cookie-name=MTY0NDA4NTMzNHw1dkZzMmphbWR5MjRkcjQ0UFJ5Z0VSV0dkNlRJX3VnM1VlcEJtVVNWZk1YUWZiQ0ViMVVVZ3U5RWxnZTJTQkR3OVZZdFdIa2hPM0cwXzZvblNycVFCWld4eFhDeUFodnVuYlVIbzlvSmpqWVl1QmNrSXp2UzZNSmtncE8xUDk3aThCckpvMmlPVmMtSXZLLTk3NkF4YkJMZ0hKVWh4M24xWUtVc3Rjenc0bHF3dWlEb2dVbjdDaDJxb0E9PXwGHt5TN5iwFsLwe7crpRnKA6rvemUvjcgD2Gx-7Zo-9A==
+Postman-Token: 7605dc86-69b1-4c83-a5f0-6268c17fa716
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/05 21:39:38 report.go:56: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/05 21:39:38 report.go:57: 
+ERROR 2022/02/05 21:41:07 report.go:55: 05.02.2022 21:41:07
+D:/hm2/managers/profile.go:82
+sql: expected 9 destination arguments in Scan, not 1
+
+GET /api/profile/edit HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 233
+Content-Type: text/plain
+Cookie: cookie-name=MTY0NDA4NTMzNHw1dkZzMmphbWR5MjRkcjQ0UFJ5Z0VSV0dkNlRJX3VnM1VlcEJtVVNWZk1YUWZiQ0ViMVVVZ3U5RWxnZTJTQkR3OVZZdFdIa2hPM0cwXzZvblNycVFCWld4eFhDeUFodnVuYlVIbzlvSmpqWVl1QmNrSXp2UzZNSmtncE8xUDk3aThCckpvMmlPVmMtSXZLLTk3NkF4YkJMZ0hKVWh4M24xWUtVc3Rjenc0bHF3dWlEb2dVbjdDaDJxb0E9PXwGHt5TN5iwFsLwe7crpRnKA6rvemUvjcgD2Gx-7Zo-9A==
+Postman-Token: f3117f20-918a-42c6-b57a-e165b8d7f016
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/05 21:41:07 report.go:56: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/05 21:41:07 report.go:57: 
+ERROR 2022/02/05 21:42:55 report.go:55: 05.02.2022 21:42:55
+D:/hm2/managers/profile.go:82
+expected slice but got struct
+
+GET /api/profile/edit HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 233
+Content-Type: text/plain
+Cookie: cookie-name=MTY0NDA4NTMzNHw1dkZzMmphbWR5MjRkcjQ0UFJ5Z0VSV0dkNlRJX3VnM1VlcEJtVVNWZk1YUWZiQ0ViMVVVZ3U5RWxnZTJTQkR3OVZZdFdIa2hPM0cwXzZvblNycVFCWld4eFhDeUFodnVuYlVIbzlvSmpqWVl1QmNrSXp2UzZNSmtncE8xUDk3aThCckpvMmlPVmMtSXZLLTk3NkF4YkJMZ0hKVWh4M24xWUtVc3Rjenc0bHF3dWlEb2dVbjdDaDJxb0E9PXwGHt5TN5iwFsLwe7crpRnKA6rvemUvjcgD2Gx-7Zo-9A==
+Postman-Token: bb9b2de1-52f8-4c14-a699-50e335f32996
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/05 21:42:55 report.go:56: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/05 21:42:55 report.go:57: 
+ERROR 2022/02/05 21:43:26 report.go:55: 05.02.2022 21:43:26
+D:/hm2/managers/profile.go:82
+missing destination name profileimg in *[]managers.ProfileManagerEdit
+
+GET /api/profile/edit HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 233
+Content-Type: text/plain
+Cookie: cookie-name=MTY0NDA4NTMzNHw1dkZzMmphbWR5MjRkcjQ0UFJ5Z0VSV0dkNlRJX3VnM1VlcEJtVVNWZk1YUWZiQ0ViMVVVZ3U5RWxnZTJTQkR3OVZZdFdIa2hPM0cwXzZvblNycVFCWld4eFhDeUFodnVuYlVIbzlvSmpqWVl1QmNrSXp2UzZNSmtncE8xUDk3aThCckpvMmlPVmMtSXZLLTk3NkF4YkJMZ0hKVWh4M24xWUtVc3Rjenc0bHF3dWlEb2dVbjdDaDJxb0E9PXwGHt5TN5iwFsLwe7crpRnKA6rvemUvjcgD2Gx-7Zo-9A==
+Postman-Token: 30cb67dc-d410-46f9-88b0-1d3a36d7101a
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/05 21:43:26 report.go:56: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/05 21:43:26 report.go:57: 
+ERROR 2022/02/05 21:44:26 report.go:55: 05.02.2022 21:44:26
+D:/hm2/managers/profile.go:82
+missing destination name profileimg in *[]managers.ProfileManagerEdit
+
+GET /api/profile/edit HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 233
+Content-Type: text/plain
+Cookie: cookie-name=MTY0NDA4NTMzNHw1dkZzMmphbWR5MjRkcjQ0UFJ5Z0VSV0dkNlRJX3VnM1VlcEJtVVNWZk1YUWZiQ0ViMVVVZ3U5RWxnZTJTQkR3OVZZdFdIa2hPM0cwXzZvblNycVFCWld4eFhDeUFodnVuYlVIbzlvSmpqWVl1QmNrSXp2UzZNSmtncE8xUDk3aThCckpvMmlPVmMtSXZLLTk3NkF4YkJMZ0hKVWh4M24xWUtVc3Rjenc0bHF3dWlEb2dVbjdDaDJxb0E9PXwGHt5TN5iwFsLwe7crpRnKA6rvemUvjcgD2Gx-7Zo-9A==
+Postman-Token: 20a35254-caf7-4cd4-9ade-0a30db6e0048
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/05 21:44:26 report.go:56: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/05 21:44:26 report.go:57: 
+ERROR 2022/02/05 21:44:59 report.go:55: 05.02.2022 21:44:59
+D:/hm2/managers/profile.go:82
+missing destination name profileimg in *[]managers.ProfileManagerEdit
+
+GET /api/profile/edit HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 233
+Content-Type: text/plain
+Cookie: cookie-name=MTY0NDA4NTMzNHw1dkZzMmphbWR5MjRkcjQ0UFJ5Z0VSV0dkNlRJX3VnM1VlcEJtVVNWZk1YUWZiQ0ViMVVVZ3U5RWxnZTJTQkR3OVZZdFdIa2hPM0cwXzZvblNycVFCWld4eFhDeUFodnVuYlVIbzlvSmpqWVl1QmNrSXp2UzZNSmtncE8xUDk3aThCckpvMmlPVmMtSXZLLTk3NkF4YkJMZ0hKVWh4M24xWUtVc3Rjenc0bHF3dWlEb2dVbjdDaDJxb0E9PXwGHt5TN5iwFsLwe7crpRnKA6rvemUvjcgD2Gx-7Zo-9A==
+Postman-Token: 7b418516-7566-42cb-8375-45c716eea36c
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/05 21:44:59 report.go:56: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/05 21:44:59 report.go:57: 
+ERROR 2022/02/05 21:47:16 report.go:55: 05.02.2022 21:47:16
+D:/hm2/managers/profile.go:82
+missing destination name profileimg in *[]managers.ProfileManagerEdit
+
+GET /api/profile/edit HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 233
+Content-Type: text/plain
+Cookie: cookie-name=MTY0NDA4NTMzNHw1dkZzMmphbWR5MjRkcjQ0UFJ5Z0VSV0dkNlRJX3VnM1VlcEJtVVNWZk1YUWZiQ0ViMVVVZ3U5RWxnZTJTQkR3OVZZdFdIa2hPM0cwXzZvblNycVFCWld4eFhDeUFodnVuYlVIbzlvSmpqWVl1QmNrSXp2UzZNSmtncE8xUDk3aThCckpvMmlPVmMtSXZLLTk3NkF4YkJMZ0hKVWh4M24xWUtVc3Rjenc0bHF3dWlEb2dVbjdDaDJxb0E9PXwGHt5TN5iwFsLwe7crpRnKA6rvemUvjcgD2Gx-7Zo-9A==
+Postman-Token: 5de33e31-f330-4ce4-ac7b-529a3157b690
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/05 21:47:16 report.go:56: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/05 21:47:16 report.go:57: 
+ERROR 2022/02/05 21:48:06 report.go:55: 05.02.2022 21:48:06
+D:/hm2/managers/profile.go:82
+pq: столбец "profileimg" не существует
+
+GET /api/profile/edit HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 233
+Content-Type: text/plain
+Cookie: cookie-name=MTY0NDA4NTMzNHw1dkZzMmphbWR5MjRkcjQ0UFJ5Z0VSV0dkNlRJX3VnM1VlcEJtVVNWZk1YUWZiQ0ViMVVVZ3U5RWxnZTJTQkR3OVZZdFdIa2hPM0cwXzZvblNycVFCWld4eFhDeUFodnVuYlVIbzlvSmpqWVl1QmNrSXp2UzZNSmtncE8xUDk3aThCckpvMmlPVmMtSXZLLTk3NkF4YkJMZ0hKVWh4M24xWUtVc3Rjenc0bHF3dWlEb2dVbjdDaDJxb0E9PXwGHt5TN5iwFsLwe7crpRnKA6rvemUvjcgD2Gx-7Zo-9A==
+Postman-Token: e34b5dd9-d061-4fe0-ab18-9543f3407ffd
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/05 21:48:06 report.go:56: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/05 21:48:06 report.go:57: 
+ERROR 2022/02/05 21:48:24 report.go:55: 05.02.2022 21:48:24
+D:/hm2/managers/profile.go:82
+sql: Scan error on column index 8, name "img": converting NULL to string is unsupported
+
+GET /api/profile/edit HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 233
+Content-Type: text/plain
+Cookie: cookie-name=MTY0NDA4NTMzNHw1dkZzMmphbWR5MjRkcjQ0UFJ5Z0VSV0dkNlRJX3VnM1VlcEJtVVNWZk1YUWZiQ0ViMVVVZ3U5RWxnZTJTQkR3OVZZdFdIa2hPM0cwXzZvblNycVFCWld4eFhDeUFodnVuYlVIbzlvSmpqWVl1QmNrSXp2UzZNSmtncE8xUDk3aThCckpvMmlPVmMtSXZLLTk3NkF4YkJMZ0hKVWh4M24xWUtVc3Rjenc0bHF3dWlEb2dVbjdDaDJxb0E9PXwGHt5TN5iwFsLwe7crpRnKA6rvemUvjcgD2Gx-7Zo-9A==
+Postman-Token: 2fe0a6d8-4084-4a49-9862-fada11158761
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/05 21:48:24 report.go:56: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/05 21:48:24 report.go:57: 
