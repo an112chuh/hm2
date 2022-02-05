@@ -9,6 +9,7 @@ import (
 	"io"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gorilla/mux"
 )
@@ -27,17 +28,19 @@ type ProfileManagerEdit struct {
 }
 
 type ProfileManager struct {
-	IsOwned  bool                  `json:"is_owned"`
-	ID       int                   `json:"id"`
-	Name     string                `json:"name"`
-	NickName string                `json:"nickname"`
-	Sex      bool                  `json:"sex"`
-	City     string                `json:"city"`
-	Birth    string                `json:"birth"`
-	Mail     string                `json:"mail"`
-	Img      string                `json:"img"`
-	Teams    []ProfileManagerTeams `json:"teams"`
-	Stat     []ProfileManagerStats `json:"stats"`
+	IsOwned    bool                  `json:"is_owned"`
+	ID         int                   `json:"id"`
+	Name       string                `json:"name"`
+	NickName   string                `json:"nickname"`
+	Sex        bool                  `json:"sex"`
+	City       string                `json:"city"`
+	Birth      string                `json:"birth"`
+	Mail       string                `json:"mail"`
+	Img        string                `json:"img"`
+	LastOnline string                `json:"last_online"`
+	Created    string                `json:"created"`
+	Teams      []ProfileManagerTeams `json:"teams"`
+	Stat       []ProfileManagerStats `json:"stats"`
 }
 
 type ProfileManagerTeams struct {
@@ -130,12 +133,19 @@ func GetProfile(r *http.Request, ID int, user config.User) (res result.ResultInf
 	}
 	data.NickName = user.Username
 	data.ID = ID
-	query := `SELECT mail from list.manager_list where id = $1`
-	err := db.QueryRow(query, ID).Scan(&data.Mail)
+	var created, last_online time.Time
+	query := `SELECT mail, created_at, last_online from list.manager_list where id = $1`
+	err := db.QueryRow(query, ID).Scan(&data.Mail, &created, &last_online)
 	if err != nil {
 		res = result.SetErrorResult(`Ошибка сервера`)
 		report.ErrorServer(r, err)
 		return
+	}
+	data.Created = created.Format("02.01.2006 15:04")
+	if last_online.Add(5 * time.Minute).After(time.Now()) {
+		data.LastOnline = "online"
+	} else {
+		data.LastOnline = last_online.Format("02.01.2006 15:04")
 	}
 	var d Date
 	var name, surname, country, city string

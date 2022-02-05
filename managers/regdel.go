@@ -21,8 +21,6 @@ type ManagerReg struct {
 	PasswordRepeat string `json:"password_repeat"`
 }
 
-var store *sessions.CookieStore
-
 func RegManagerHandler(w http.ResponseWriter, r *http.Request) {
 	session, err := config.Store.Get(r, "cookie-name")
 	if err != nil {
@@ -163,6 +161,12 @@ func CreateManager(r *http.Request, data ManagerReg) (res result.ResultInfo, ID 
 	if err != nil {
 		report.ErrorServer(r, err)
 		res = result.SetErrorResult(`Внутренняя ошибка`)
+		query := "DELETE FROM list.manager_list WHERE id = $1"
+		_, err := db.Exec(query, ID)
+		if err != nil {
+			report.ErrorServer(r, err)
+			res = result.SetErrorResult(`Внутренняя ошибка`)
+		}
 		return res, -1
 	}
 	return res, ID
@@ -201,5 +205,6 @@ func IsLogin(w http.ResponseWriter, r *http.Request) (res bool, user config.User
 	} else {
 		res = true
 	}
+	SetOnline(user)
 	return res, user
 }

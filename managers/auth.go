@@ -85,7 +85,7 @@ func FindLogin(r *http.Request, data ManagerLogin) (res result.ResultInfo) {
 		return
 	}
 	if !LoginExist {
-		res = result.SetErrorResult(`Такого логина не существует`)
+		res = result.SetErrorResult(`Неверные логин или пароль`)
 		return
 	}
 	res.Done = true
@@ -107,7 +107,7 @@ func CheckPassword(r *http.Request, data ManagerLogin) (res result.ResultInfo, I
 		res.Done = true
 		res.Items = ID
 	} else {
-		res = result.SetErrorResult(`Пароль неверный`)
+		res = result.SetErrorResult(`Неверные логин или пароль`)
 		return
 	}
 	return res, ID
