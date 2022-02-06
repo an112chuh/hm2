@@ -30,11 +30,12 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		report.ErrorServer(r, err)
 	}
-	res, ID := LoginManager(r, data)
+	res, ID, Rights := LoginManager(r, data)
 	if res.Done {
 		user := &config.User{
 			Username:      data.Login,
 			ID:            ID,
+			Rights:        Rights,
 			Authenticated: true,
 		}
 		session.Values["user"] = user
@@ -66,12 +67,22 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	result.ReturnJSON(w, &res)
 }
 
-func LoginManager(r *http.Request, data ManagerLogin) (res result.ResultInfo, ID int) {
+func LoginManager(r *http.Request, data ManagerLogin) (res result.ResultInfo, ID int, Rights config.Rights) {
+	db := config.ConnectDB()
 	res = FindLogin(r, data)
 	if res.Done {
 		res, ID = CheckPassword(r, data)
+		if res.Done {
+			query := `SELECT rights from list.manager_list where id = $1`
+			err := db.QueryRow(query, ID).Scan(&Rights)
+			if err != nil {
+				report.ErrorServer(r, err)
+				res = result.SetErrorResult(`Внутренняя ошибка`)
+				return
+			}
+		}
 	}
-	return res, ID
+	return res, ID, Rights
 }
 
 func FindLogin(r *http.Request, data ManagerLogin) (res result.ResultInfo) {

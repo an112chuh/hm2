@@ -10,9 +10,17 @@ import (
 var ErrorLog *log.Logger
 var AccessLog *log.Logger
 
+type Rights int
+
+const (
+	Default Rights = 1
+	Admin   Rights = 2
+)
+
 type User struct {
 	Username      string
 	ID            int `json:"id"`
+	Rights        Rights
 	Authenticated bool
 }
 

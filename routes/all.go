@@ -10,6 +10,7 @@ import (
 func GetAllHandlers(r *mux.Router) {
 	r.HandleFunc("/api/noauth", NoAuthHandler)
 	GetManagerHandlers(r)
+	GetTeamHandlers(r)
 }
 
 func NoAuthHandler(w http.ResponseWriter, r *http.Request) {
