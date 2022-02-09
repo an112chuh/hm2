@@ -72,7 +72,13 @@ type Date struct {
 }
 
 func ProfileHandler(w http.ResponseWriter, r *http.Request) {
-
+	var res result.ResultInfo
+	IsLogged, user := IsLogin(w, r, true)
+	if !IsLogged {
+		return
+	}
+	res = GetProfile(r, user.ID, user)
+	result.ReturnJSON(w, &res)
 }
 
 func GetProfileHandler(w http.ResponseWriter, r *http.Request) {
