@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"hm2/managers"
 	"hm2/result"
 	"net/http"
 
@@ -16,6 +17,11 @@ func GetAllHandlers(r *mux.Router) {
 func NoAuthHandler(w http.ResponseWriter, r *http.Request) {
 	var res result.ResultInfo
 	res.Done = true
-	res.Items = "Hello, world!"
+	IsLogged, user := managers.IsLogin(w, r, false)
+	if IsLogged {
+		res.Items = map[string]interface{}{"logged": "true", "id": user.ID}
+	} else {
+		res.Items = map[string]interface{}{"logged": "false"}
+	}
 	result.ReturnJSON(w, &res)
 }

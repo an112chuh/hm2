@@ -77,11 +77,7 @@ func ProfileHandler(w http.ResponseWriter, r *http.Request) {
 
 func GetProfileHandler(w http.ResponseWriter, r *http.Request) {
 	var res result.ResultInfo
-	IsLogged, user := IsLogin(w, r)
-	if !IsLogged {
-		res = result.SetErrorResult(`Пожалуйста, авторизуйтесь для данной операции`)
-		return
-	}
+	_, user := IsLogin(w, r, false)
 	vars := mux.Vars(r)
 	id := vars["id"]
 	ID, _ := strconv.Atoi(id)
@@ -91,9 +87,8 @@ func GetProfileHandler(w http.ResponseWriter, r *http.Request) {
 
 func EditProfileHandler(w http.ResponseWriter, r *http.Request) {
 	var res result.ResultInfo
-	IsLogged, user := IsLogin(w, r)
+	IsLogged, user := IsLogin(w, r, true)
 	if !IsLogged {
-		res = result.SetErrorResult(`Пожалуйста, авторизуйтесь для данной операции`)
 		return
 	}
 	res = EditProfile(r, user.ID)
@@ -102,9 +97,8 @@ func EditProfileHandler(w http.ResponseWriter, r *http.Request) {
 
 func EditProfileConfirmHandler(w http.ResponseWriter, r *http.Request) {
 	var res result.ResultInfo
-	IsLogged, user := IsLogin(w, r)
+	IsLogged, user := IsLogin(w, r, true)
 	if !IsLogged {
-		res = result.SetErrorResult(`Пожалуйста, авторизуйтесь для данной операции`)
 		return
 	}
 	var data ProfileManagerEdit
@@ -128,14 +122,13 @@ func GetProfile(r *http.Request, ID int, user config.User) (res result.ResultInf
 		return
 	}
 	data.IsOwned = false
-	if ID == user.ID {
+	if ID == user.ID && user.Authenticated {
 		data.IsOwned = true
 	}
-	data.NickName = user.Username
 	data.ID = ID
 	var created, last_online time.Time
-	query := `SELECT mail, created_at, last_online from list.manager_list where id = $1`
-	err := db.QueryRow(query, ID).Scan(&data.Mail, &created, &last_online)
+	query := `SELECT login, mail, created_at, last_online from list.manager_list where id = $1`
+	err := db.QueryRow(query, ID).Scan(&data.NickName, &data.Mail, &created, &last_online)
 	if err != nil {
 		res = result.SetErrorResult(`Ошибка сервера`)
 		report.ErrorServer(r, err)
@@ -180,6 +173,9 @@ func EditProfile(r *http.Request, ID int) (res result.ResultInfo) {
 		res = result.SetErrorResult(`Ошибка сервера`)
 		report.ErrorServer(r, err)
 		return
+	}
+	for i := 0; i < len(data); i++ {
+		data[i].ID = ID
 	}
 	res.Done = true
 	res.Items = data
@@ -251,7 +247,7 @@ func FillStatsTest() (res []ProfileManagerStats) {
 func CheckProfileExist(r *http.Request, ID int) bool {
 	db := config.ConnectDB()
 	var exist bool
-	query := `SELECT EXISTS(SELECT 1 from list.manager_list where id = $1)`
+	query := `SELECT EXISTS(SELECT 1 from list.manager_list where id = $1 and is_active = TRUE)`
 	err := db.QueryRow(query, ID).Scan(&exist)
 	if err != nil {
 		report.ErrorServer(r, err)

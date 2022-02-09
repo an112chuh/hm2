@@ -315,3 +315,54 @@ User-Agent: PostmanRuntime/7.29.0
 
 ERROR 2022/02/05 21:48:24 report.go:56: ——————————————————————————————————————————————————————————————————————
 ERROR 2022/02/05 21:48:24 report.go:57: 
+ERROR 2022/02/09 21:47:08 report.go:55: 09.02.2022 21:47:08
+D:/hm2/managers/regdel.go:172
+pq: пустой идентификатор в кавычках (примерное положение: """")
+
+POST /api/register HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 117
+Content-Type: text/plain
+Postman-Token: 6ea71934-f38d-4a4c-b5b8-381b34bc5950
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/09 21:47:08 report.go:56: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/09 21:47:08 report.go:57: 
+ERROR 2022/02/09 21:48:02 report.go:55: 09.02.2022 21:48:02
+D:/hm2/managers/regdel.go:172
+pq: столбец " " не существует
+
+POST /api/register HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 117
+Content-Type: text/plain
+Postman-Token: 4c4a6677-7741-46f8-a3a4-1cb9a08a2f41
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/09 21:48:02 report.go:56: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/09 21:48:02 report.go:57: 
+ERROR 2022/02/09 21:48:56 report.go:55: 09.02.2022 21:48:56
+D:/hm2/managers/regdel.go:172
+pq: столбец " " не существует
+
+POST /api/register HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 117
+Content-Type: text/plain
+Postman-Token: c93e9345-f344-497d-a86d-4f17c4819bb4
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/09 21:48:56 report.go:56: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/09 21:48:56 report.go:57: 

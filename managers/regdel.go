@@ -82,7 +82,7 @@ func RegManager(r *http.Request, data ManagerReg) (res result.ResultInfo, user c
 	}
 	db := config.ConnectDB()
 	var LoginExist bool
-	query := "SELECT EXISTS(SELECT 1 FROM list.manager_list WHERE login = $1)"
+	query := "SELECT EXISTS(SELECT 1 FROM list.manager_list WHERE login = $1 AND is_active = TRUE)"
 	err := db.QueryRow(query, data.Login).Scan(&LoginExist)
 	if err != nil {
 		report.ErrorServer(r, err)
@@ -94,7 +94,7 @@ func RegManager(r *http.Request, data ManagerReg) (res result.ResultInfo, user c
 		return
 	}
 	var MailExist bool
-	query = "SELECT EXISTS(SELECT 1 FROM list.manager_list WHERE mail = $1)"
+	query = "SELECT EXISTS(SELECT 1 FROM list.manager_list WHERE mail = $1 AND is_active = TRUE)"
 	err = db.QueryRow(query, data.Mail).Scan(&MailExist)
 	if err != nil {
 		report.ErrorServer(r, err)
@@ -133,9 +133,17 @@ func DeleteManager(r *http.Request, id int) (res result.ResultInfo) {
 
 func CreateManager(r *http.Request, data ManagerReg) (res result.ResultInfo, ID int) {
 	db := config.ConnectDB()
+	tx, err := db.Beginx()
+	if err != nil {
+		report.ErrorServer(r, err)
+		return
+	}
+	defer func() {
+		_ = tx.Rollback()
+	}()
 	Hash := HashCreation(data.Password)
 	t := time.Now()
-	query := `INSERT INTO list.manager_list (
+	query := tx.Rebind(`INSERT INTO list.manager_list (
 		login
 		, hash
 		, mail
@@ -148,26 +156,27 @@ func CreateManager(r *http.Request, data ManagerReg) (res result.ResultInfo, ID 
 		, created_at
 		, last_online
 		, is_active)
-		VALUES ($1, $2, $3, 0, 0, 0, 0, 0, 1, $4, $5, TRUE) RETURNING id`
+		VALUES ($1, $2, $3, 0, 0, 0, 0, 0, 1, $4, $5, TRUE) RETURNING id`)
 	params := []interface{}{data.Login, Hash, data.Mail, t, t}
-	err := db.QueryRow(query, params...).Scan(&ID)
+	err = tx.QueryRow(query, params...).Scan(&ID)
 	if err != nil {
 		report.ErrorServer(r, err)
 		res = result.SetErrorResult(`Внутренняя ошибка`)
 		return res, -1
 	}
-	query = `INSERT INTO managers.data (id) VALUES ($1)`
-	_, err = db.Exec(query, ID)
+	query = tx.Rebind(`INSERT INTO managers.data (id, name, surname, sex, country, city, birthd, birthm, birthy, img)
+		VALUES 
+		($1, '', '', true, '', '', -1, -1, -1, '')`)
+	_, err = tx.Exec(query, ID)
 	if err != nil {
 		report.ErrorServer(r, err)
 		res = result.SetErrorResult(`Внутренняя ошибка`)
-		query := "DELETE FROM list.manager_list WHERE id = $1"
-		_, err := db.Exec(query, ID)
-		if err != nil {
-			report.ErrorServer(r, err)
-			res = result.SetErrorResult(`Внутренняя ошибка`)
-		}
 		return res, -1
+	}
+	if err = tx.Commit(); err != nil {
+		report.ErrorServer(r, err)
+		result.SetErrorResult(`Внутренняя ошибка`)
+		return
 	}
 	return res, ID
 }
@@ -188,7 +197,7 @@ func getUser(s *sessions.Session) config.User {
 	return user
 }
 
-func IsLogin(w http.ResponseWriter, r *http.Request) (res bool, user config.User) {
+func IsLogin(w http.ResponseWriter, r *http.Request, IsMessageRequired bool) (res bool, user config.User) {
 	res = false
 	session, err := config.Store.Get(r, "cookie-name")
 	if err != nil {
@@ -206,5 +215,9 @@ func IsLogin(w http.ResponseWriter, r *http.Request) (res bool, user config.User
 		res = true
 	}
 	SetOnline(user)
+	if !res && IsMessageRequired {
+		response := result.SetErrorResult(`Пожалуйста, авторизуйтесь для завершения данной операции`)
+		result.ReturnJSON(w, &response)
+	}
 	return res, user
 }
