@@ -366,3 +366,300 @@ User-Agent: PostmanRuntime/7.29.0
 
 ERROR 2022/02/09 21:48:56 report.go:56: ——————————————————————————————————————————————————————————————————————
 ERROR 2022/02/09 21:48:56 report.go:57: 
+ERROR 2022/02/14 00:24:09 report.go:58: 14.02.2022 00:24:09
+D:/hm2/teams/create.go:57
+invalid character 'Ð' after object key
+
+POST /adm/api/create_team HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 140
+Content-Type: text/plain
+Cookie: cookie-name=MTY0NDc4NzA0NXxvM0d4Z2ZHUXFWSUE0M3QtSmtqdzRZMVNNa1NjdG4tNHMyaWlSX1dqVV9YUW9qc0k5cUxja0VoVlhiTXR6QzZBRlMzU3hDMExLSDdFdHkwYkJGbXVqakZ3cjdPUGFCNlRiODJFTG95VDhaUDN5c0xIempReTZZQ21fTG8xQ2JxamJNQ3U4MjM3NHBSRWJnd2NaTmxob1A3OVNVR0E1YmQtUUg5Vk9PM1p5NUtnOFRXSFlMUko0RXQwcEtyNGRKSzRqeDlEU1M2bkJyST18L6vUXSMRk777GfLvqp6gXoHusjJ9dYALXT-5lCPPER0=
+Postman-Token: dd8aa12a-e6f8-4450-9d7e-95c3fbf7c558
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/14 00:24:09 report.go:59: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/14 00:24:09 report.go:60: 
+ERROR 2022/02/14 00:24:09 report.go:58: 14.02.2022 00:24:09
+D:/hm2/teams/create.go:120
+pq: ошибка синтаксиса в конце
+
+SELECT EXISTS(SELECT 1 FROM list.nation_list where name = ''
+
+&pq.Error{Severity:"ОШИБКА", Code:"42601", Message:"ошибка синтаксиса в конце", Detail:"", Hint:"", Position:"61", InternalPosition:"", InternalQuery:"", Where:"", Schema:"", Table:"", Column:"", DataTypeName:"", Constraint:"", File:"scan.l", Line:"1172", Routine:"scanner_yyerror"}
+
+POST /adm/api/create_team HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 140
+Content-Type: text/plain
+Cookie: cookie-name=MTY0NDc4NzA0NXxvM0d4Z2ZHUXFWSUE0M3QtSmtqdzRZMVNNa1NjdG4tNHMyaWlSX1dqVV9YUW9qc0k5cUxja0VoVlhiTXR6QzZBRlMzU3hDMExLSDdFdHkwYkJGbXVqakZ3cjdPUGFCNlRiODJFTG95VDhaUDN5c0xIempReTZZQ21fTG8xQ2JxamJNQ3U4MjM3NHBSRWJnd2NaTmxob1A3OVNVR0E1YmQtUUg5Vk9PM1p5NUtnOFRXSFlMUko0RXQwcEtyNGRKSzRqeDlEU1M2bkJyST18L6vUXSMRk777GfLvqp6gXoHusjJ9dYALXT-5lCPPER0=
+Postman-Token: dd8aa12a-e6f8-4450-9d7e-95c3fbf7c558
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/14 00:24:09 report.go:59: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/14 00:24:09 report.go:60: 
+ERROR 2022/02/14 00:24:44 report.go:58: 14.02.2022 00:24:44
+D:/hm2/teams/create.go:57
+invalid character 'Ð' after object key
+
+POST /adm/api/create_team HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 140
+Content-Type: text/plain
+Cookie: cookie-name=MTY0NDc4NzA0NXxvM0d4Z2ZHUXFWSUE0M3QtSmtqdzRZMVNNa1NjdG4tNHMyaWlSX1dqVV9YUW9qc0k5cUxja0VoVlhiTXR6QzZBRlMzU3hDMExLSDdFdHkwYkJGbXVqakZ3cjdPUGFCNlRiODJFTG95VDhaUDN5c0xIempReTZZQ21fTG8xQ2JxamJNQ3U4MjM3NHBSRWJnd2NaTmxob1A3OVNVR0E1YmQtUUg5Vk9PM1p5NUtnOFRXSFlMUko0RXQwcEtyNGRKSzRqeDlEU1M2bkJyST18L6vUXSMRk777GfLvqp6gXoHusjJ9dYALXT-5lCPPER0=
+Postman-Token: 8034053a-cc2c-47b6-b032-30640ededcbb
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/14 00:24:44 report.go:59: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/14 00:24:44 report.go:60: 
+ERROR 2022/02/14 00:26:25 report.go:58: 14.02.2022 00:26:25
+D:/hm2/teams/create.go:57
+invalid character 'Ð' after object key
+
+POST /adm/api/create_team HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 140
+Content-Type: text/plain
+Cookie: cookie-name=MTY0NDc4NzA0NXxvM0d4Z2ZHUXFWSUE0M3QtSmtqdzRZMVNNa1NjdG4tNHMyaWlSX1dqVV9YUW9qc0k5cUxja0VoVlhiTXR6QzZBRlMzU3hDMExLSDdFdHkwYkJGbXVqakZ3cjdPUGFCNlRiODJFTG95VDhaUDN5c0xIempReTZZQ21fTG8xQ2JxamJNQ3U4MjM3NHBSRWJnd2NaTmxob1A3OVNVR0E1YmQtUUg5Vk9PM1p5NUtnOFRXSFlMUko0RXQwcEtyNGRKSzRqeDlEU1M2bkJyST18L6vUXSMRk777GfLvqp6gXoHusjJ9dYALXT-5lCPPER0=
+Postman-Token: 921e5ceb-c425-4499-a386-9b9dac27ea6e
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/14 00:26:25 report.go:59: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/14 00:26:25 report.go:60: 
+ERROR 2022/02/14 00:27:15 report.go:58: 14.02.2022 00:27:15
+D:/hm2/teams/create.go:59
+invalid character 'Ð' after object key
+
+POST /adm/api/create_team HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 140
+Content-Type: text/plain
+Cookie: cookie-name=MTY0NDc4NzA0NXxvM0d4Z2ZHUXFWSUE0M3QtSmtqdzRZMVNNa1NjdG4tNHMyaWlSX1dqVV9YUW9qc0k5cUxja0VoVlhiTXR6QzZBRlMzU3hDMExLSDdFdHkwYkJGbXVqakZ3cjdPUGFCNlRiODJFTG95VDhaUDN5c0xIempReTZZQ21fTG8xQ2JxamJNQ3U4MjM3NHBSRWJnd2NaTmxob1A3OVNVR0E1YmQtUUg5Vk9PM1p5NUtnOFRXSFlMUko0RXQwcEtyNGRKSzRqeDlEU1M2bkJyST18L6vUXSMRk777GfLvqp6gXoHusjJ9dYALXT-5lCPPER0=
+Postman-Token: 54e3cfe4-52d3-4994-92bd-0fd57b79ae00
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/14 00:27:15 report.go:59: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/14 00:27:15 report.go:60: 
+ERROR 2022/02/14 00:30:30 report.go:58: 14.02.2022 00:30:30
+D:/hm2/players/create.go:292
+open /txt_files/names/RUSn.txt: The system cannot find the path specified.
+
+POST /adm/api/create_team HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 141
+Content-Type: text/plain
+Cookie: cookie-name=MTY0NDc4NzA0NXxvM0d4Z2ZHUXFWSUE0M3QtSmtqdzRZMVNNa1NjdG4tNHMyaWlSX1dqVV9YUW9qc0k5cUxja0VoVlhiTXR6QzZBRlMzU3hDMExLSDdFdHkwYkJGbXVqakZ3cjdPUGFCNlRiODJFTG95VDhaUDN5c0xIempReTZZQ21fTG8xQ2JxamJNQ3U4MjM3NHBSRWJnd2NaTmxob1A3OVNVR0E1YmQtUUg5Vk9PM1p5NUtnOFRXSFlMUko0RXQwcEtyNGRKSzRqeDlEU1M2bkJyST18L6vUXSMRk777GfLvqp6gXoHusjJ9dYALXT-5lCPPER0=
+Postman-Token: b91acbe3-0759-4216-a50b-80153c6f9234
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/14 00:30:30 report.go:59: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/14 00:30:30 report.go:60: 
+ERROR 2022/02/14 00:30:30 report.go:58: 14.02.2022 00:30:30
+D:/hm2/players/create.go:292
+open /txt_files/names/RUSs.txt: The system cannot find the path specified.
+
+POST /adm/api/create_team HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 141
+Content-Type: text/plain
+Cookie: cookie-name=MTY0NDc4NzA0NXxvM0d4Z2ZHUXFWSUE0M3QtSmtqdzRZMVNNa1NjdG4tNHMyaWlSX1dqVV9YUW9qc0k5cUxja0VoVlhiTXR6QzZBRlMzU3hDMExLSDdFdHkwYkJGbXVqakZ3cjdPUGFCNlRiODJFTG95VDhaUDN5c0xIempReTZZQ21fTG8xQ2JxamJNQ3U4MjM3NHBSRWJnd2NaTmxob1A3OVNVR0E1YmQtUUg5Vk9PM1p5NUtnOFRXSFlMUko0RXQwcEtyNGRKSzRqeDlEU1M2bkJyST18L6vUXSMRk777GfLvqp6gXoHusjJ9dYALXT-5lCPPER0=
+Postman-Token: b91acbe3-0759-4216-a50b-80153c6f9234
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/14 00:30:30 report.go:59: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/14 00:30:30 report.go:60: 
+ERROR 2022/02/14 00:32:24 report.go:58: 14.02.2022 00:32:24
+D:/hm2/players/create.go:303
+type not a pointer: string
+
+POST /adm/api/create_team HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 141
+Content-Type: text/plain
+Cookie: cookie-name=MTY0NDc4NzA0NXxvM0d4Z2ZHUXFWSUE0M3QtSmtqdzRZMVNNa1NjdG4tNHMyaWlSX1dqVV9YUW9qc0k5cUxja0VoVlhiTXR6QzZBRlMzU3hDMExLSDdFdHkwYkJGbXVqakZ3cjdPUGFCNlRiODJFTG95VDhaUDN5c0xIempReTZZQ21fTG8xQ2JxamJNQ3U4MjM3NHBSRWJnd2NaTmxob1A3OVNVR0E1YmQtUUg5Vk9PM1p5NUtnOFRXSFlMUko0RXQwcEtyNGRKSzRqeDlEU1M2bkJyST18L6vUXSMRk777GfLvqp6gXoHusjJ9dYALXT-5lCPPER0=
+Postman-Token: 687a28a1-7391-491f-bbce-d070abdfc858
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/14 00:32:24 report.go:59: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/14 00:32:24 report.go:60: 
+ERROR 2022/02/14 00:32:24 report.go:58: 14.02.2022 00:32:24
+D:/hm2/players/create.go:303
+type not a pointer: string
+
+POST /adm/api/create_team HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 141
+Content-Type: text/plain
+Cookie: cookie-name=MTY0NDc4NzA0NXxvM0d4Z2ZHUXFWSUE0M3QtSmtqdzRZMVNNa1NjdG4tNHMyaWlSX1dqVV9YUW9qc0k5cUxja0VoVlhiTXR6QzZBRlMzU3hDMExLSDdFdHkwYkJGbXVqakZ3cjdPUGFCNlRiODJFTG95VDhaUDN5c0xIempReTZZQ21fTG8xQ2JxamJNQ3U4MjM3NHBSRWJnd2NaTmxob1A3OVNVR0E1YmQtUUg5Vk9PM1p5NUtnOFRXSFlMUko0RXQwcEtyNGRKSzRqeDlEU1M2bkJyST18L6vUXSMRk777GfLvqp6gXoHusjJ9dYALXT-5lCPPER0=
+Postman-Token: 687a28a1-7391-491f-bbce-d070abdfc858
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/14 00:32:24 report.go:59: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/14 00:32:24 report.go:60: 
+ERROR 2022/02/14 01:23:25 report.go:58: 14.02.2022 01:23:25
+D:/hm2/teams/roster.go:50
+sql: Scan error on column index 1, name "manager_id": converting NULL to int is unsupported
+
+SELECT name, manager_id, country, city, stadium, capacity, cash from list.team_list WHERE id = 4
+
+&pq.Error{Severity:"", Code:"", Message:"", Detail:"", Hint:"", Position:"", InternalPosition:"", InternalQuery:"", Where:"", Schema:"", Table:"", Column:"", DataTypeName:"", Constraint:"", File:"", Line:"", Routine:""}
+
+GET /api/roster/4 HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Cookie: cookie-name=MTY0NDc4NzA0NXxvM0d4Z2ZHUXFWSUE0M3QtSmtqdzRZMVNNa1NjdG4tNHMyaWlSX1dqVV9YUW9qc0k5cUxja0VoVlhiTXR6QzZBRlMzU3hDMExLSDdFdHkwYkJGbXVqakZ3cjdPUGFCNlRiODJFTG95VDhaUDN5c0xIempReTZZQ21fTG8xQ2JxamJNQ3U4MjM3NHBSRWJnd2NaTmxob1A3OVNVR0E1YmQtUUg5Vk9PM1p5NUtnOFRXSFlMUko0RXQwcEtyNGRKSzRqeDlEU1M2bkJyST18L6vUXSMRk777GfLvqp6gXoHusjJ9dYALXT-5lCPPER0=
+Postman-Token: 58b08714-0247-4b60-86cb-8fad2639ff6b
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/14 01:23:25 report.go:59: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/14 01:23:25 report.go:60: 
+ERROR 2022/02/14 01:24:30 report.go:58: 14.02.2022 01:24:30
+D:/hm2/teams/roster.go:60
+pq: столбец "name" не существует
+
+SELECT name, surname from list.manager_list where id = 10
+
+&pq.Error{Severity:"ОШИБКА", Code:"42703", Message:"столбец \"name\" не существует", Detail:"", Hint:"", Position:"8", InternalPosition:"", InternalQuery:"", Where:"", Schema:"", Table:"", Column:"", DataTypeName:"", Constraint:"", File:"parse_relation.c", Line:"3599", Routine:"errorMissingColumn"}
+
+GET /api/roster/4 HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Cookie: cookie-name=MTY0NDc4NzA0NXxvM0d4Z2ZHUXFWSUE0M3QtSmtqdzRZMVNNa1NjdG4tNHMyaWlSX1dqVV9YUW9qc0k5cUxja0VoVlhiTXR6QzZBRlMzU3hDMExLSDdFdHkwYkJGbXVqakZ3cjdPUGFCNlRiODJFTG95VDhaUDN5c0xIempReTZZQ21fTG8xQ2JxamJNQ3U4MjM3NHBSRWJnd2NaTmxob1A3OVNVR0E1YmQtUUg5Vk9PM1p5NUtnOFRXSFlMUko0RXQwcEtyNGRKSzRqeDlEU1M2bkJyST18L6vUXSMRk777GfLvqp6gXoHusjJ9dYALXT-5lCPPER0=
+Postman-Token: 91fb436d-dbcf-4963-9787-97f6bd62a3f0
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/14 01:24:30 report.go:59: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/14 01:24:30 report.go:60: 
+ERROR 2022/02/14 01:25:24 report.go:58: 14.02.2022 01:25:24
+D:/hm2/teams/roster.go:82
+pq: неоднозначная ссылка на столбец "team_id"
+
+SELECT name,
+		surname,
+		pos, 
+		nat,
+		age,
+		str,
+		style,
+		morale, 
+		readyness,
+		tireness,
+		price,
+		GP, G, A, P, PIM, PM, rating FROM list.players_list, players.history WHERE team_id = 4
+
+&pq.Error{Severity:"ОШИБКА", Code:"42702", Message:"неоднозначная ссылка на столбец \"team_id\"", Detail:"", Hint:"", Position:"185", InternalPosition:"", InternalQuery:"", Where:"", Schema:"", Table:"", Column:"", DataTypeName:"", Constraint:"", File:"parse_relation.c", Line:"891", Routine:"colNameToVar"}
+
+GET /api/roster/4 HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Cookie: cookie-name=MTY0NDc4NzA0NXxvM0d4Z2ZHUXFWSUE0M3QtSmtqdzRZMVNNa1NjdG4tNHMyaWlSX1dqVV9YUW9qc0k5cUxja0VoVlhiTXR6QzZBRlMzU3hDMExLSDdFdHkwYkJGbXVqakZ3cjdPUGFCNlRiODJFTG95VDhaUDN5c0xIempReTZZQ21fTG8xQ2JxamJNQ3U4MjM3NHBSRWJnd2NaTmxob1A3OVNVR0E1YmQtUUg5Vk9PM1p5NUtnOFRXSFlMUko0RXQwcEtyNGRKSzRqeDlEU1M2bkJyST18L6vUXSMRk777GfLvqp6gXoHusjJ9dYALXT-5lCPPER0=
+Postman-Token: bda82641-b5b7-4b88-98c5-5e9d6e9f438c
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/14 01:25:24 report.go:59: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/14 01:25:24 report.go:60: 
+ERROR 2022/02/14 02:24:56 report.go:58: 14.02.2022 02:24:56
+D:/hm2/players/profile.go:84
+pq: столбец "speed" не существует
+
+SELECT speed, skating, slap_shot, wrist_shot, tackling, blocking, passing, vision, agressiveness, resistance, faceoff, side where player_id = 10
+
+&pq.Error{Severity:"ОШИБКА", Code:"42703", Message:"столбец \"speed\" не существует", Detail:"", Hint:"", Position:"8", InternalPosition:"", InternalQuery:"", Where:"", Schema:"", Table:"", Column:"", DataTypeName:"", Constraint:"", File:"parse_relation.c", Line:"3599", Routine:"errorMissingColumn"}
+
+GET /api/player/10 HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Cookie: cookie-name=MTY0NDc4NzA0NXxvM0d4Z2ZHUXFWSUE0M3QtSmtqdzRZMVNNa1NjdG4tNHMyaWlSX1dqVV9YUW9qc0k5cUxja0VoVlhiTXR6QzZBRlMzU3hDMExLSDdFdHkwYkJGbXVqakZ3cjdPUGFCNlRiODJFTG95VDhaUDN5c0xIempReTZZQ21fTG8xQ2JxamJNQ3U4MjM3NHBSRWJnd2NaTmxob1A3OVNVR0E1YmQtUUg5Vk9PM1p5NUtnOFRXSFlMUko0RXQwcEtyNGRKSzRqeDlEU1M2bkJyST18L6vUXSMRk777GfLvqp6gXoHusjJ9dYALXT-5lCPPER0=
+Postman-Token: 15ef50d3-7a77-4fdf-97d5-68e0a3abc74b
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/14 02:24:56 report.go:59: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/14 02:24:56 report.go:60: 
+ERROR 2022/02/14 02:25:39 report.go:58: 14.02.2022 02:25:39
+D:/hm2/players/profile.go:93
+pq: ошибка синтаксиса (примерное положение: "where")
+
+SELECT team_name, GP, G, A, P, PIM, PM, SOG, SOfG, rating from players.history ORDER BY id desc where player_id = 10
+
+&pq.Error{Severity:"ОШИБКА", Code:"42601", Message:"ошибка синтаксиса (примерное положение: \"where\")", Detail:"", Hint:"", Position:"97", InternalPosition:"", InternalQuery:"", Where:"", Schema:"", Table:"", Column:"", DataTypeName:"", Constraint:"", File:"scan.l", Line:"1180", Routine:"scanner_yyerror"}
+
+GET /api/player/10 HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Cookie: cookie-name=MTY0NDc4NzA0NXxvM0d4Z2ZHUXFWSUE0M3QtSmtqdzRZMVNNa1NjdG4tNHMyaWlSX1dqVV9YUW9qc0k5cUxja0VoVlhiTXR6QzZBRlMzU3hDMExLSDdFdHkwYkJGbXVqakZ3cjdPUGFCNlRiODJFTG95VDhaUDN5c0xIempReTZZQ21fTG8xQ2JxamJNQ3U4MjM3NHBSRWJnd2NaTmxob1A3OVNVR0E1YmQtUUg5Vk9PM1p5NUtnOFRXSFlMUko0RXQwcEtyNGRKSzRqeDlEU1M2bkJyST18L6vUXSMRk777GfLvqp6gXoHusjJ9dYALXT-5lCPPER0=
+Postman-Token: d8beb1ab-d181-4b7e-b9b0-f2bed9ac3cf3
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/14 02:25:39 report.go:59: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/14 02:25:39 report.go:60: 
+ERROR 2022/02/14 02:26:06 report.go:58: 14.02.2022 02:26:06
+D:/hm2/players/profile.go:102
+sql: Scan error on column index 0, name "team_name": converting driver.Value type string ("Спартак") to a int: invalid syntax
+
+SELECT team_name, GP, G, A, P, PIM, PM, SOG, SOfG, rating from players.history where player_id = 10 ORDER BY id desc 
+
+&pq.Error{Severity:"", Code:"", Message:"", Detail:"", Hint:"", Position:"", InternalPosition:"", InternalQuery:"", Where:"", Schema:"", Table:"", Column:"", DataTypeName:"", Constraint:"", File:"", Line:"", Routine:""}
+
+GET /api/player/10 HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Cookie: cookie-name=MTY0NDc4NzA0NXxvM0d4Z2ZHUXFWSUE0M3QtSmtqdzRZMVNNa1NjdG4tNHMyaWlSX1dqVV9YUW9qc0k5cUxja0VoVlhiTXR6QzZBRlMzU3hDMExLSDdFdHkwYkJGbXVqakZ3cjdPUGFCNlRiODJFTG95VDhaUDN5c0xIempReTZZQ21fTG8xQ2JxamJNQ3U4MjM3NHBSRWJnd2NaTmxob1A3OVNVR0E1YmQtUUg5Vk9PM1p5NUtnOFRXSFlMUko0RXQwcEtyNGRKSzRqeDlEU1M2bkJyST18L6vUXSMRk777GfLvqp6gXoHusjJ9dYALXT-5lCPPER0=
+Postman-Token: 126ed16a-6f5e-494a-bdcb-6976abf4d791
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/02/14 02:26:06 report.go:59: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/02/14 02:26:06 report.go:60: 

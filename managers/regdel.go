@@ -197,8 +197,7 @@ func getUser(s *sessions.Session) config.User {
 	return user
 }
 
-func IsLogin(w http.ResponseWriter, r *http.Request, IsMessageRequired bool) (res bool, user config.User) {
-	res = false
+func IsLogin(w http.ResponseWriter, r *http.Request, IsMessageRequired bool) (user config.User) {
 	session, err := config.Store.Get(r, "cookie-name")
 	if err != nil {
 		report.ErrorServer(r, err)
@@ -211,13 +210,11 @@ func IsLogin(w http.ResponseWriter, r *http.Request, IsMessageRequired bool) (re
 			report.ErrorServer(r, err)
 			return
 		}
-	} else {
-		res = true
 	}
 	SetOnline(user)
-	if !res && IsMessageRequired {
+	if !user.Authenticated && IsMessageRequired {
 		response := result.SetErrorResult(`Пожалуйста, авторизуйтесь для завершения данной операции`)
 		result.ReturnJSON(w, &response)
 	}
-	return res, user
+	return user
 }

@@ -88,7 +88,7 @@ func LoginManager(r *http.Request, data ManagerLogin) (res result.ResultInfo, ID
 func FindLogin(r *http.Request, data ManagerLogin) (res result.ResultInfo) {
 	db := config.ConnectDB()
 	var LoginExist bool
-	query := `SELECT EXISTS (SELECT 1 FROM list.manager_list WHERE login = $1)`
+	query := `SELECT EXISTS (SELECT 1 FROM list.manager_list WHERE login = $1 AND is_active = TRUE)`
 	err := db.QueryRow(query, data.Login).Scan(&LoginExist)
 	if err != nil {
 		report.ErrorServer(r, err)
@@ -107,7 +107,7 @@ func CheckPassword(r *http.Request, data ManagerLogin) (res result.ResultInfo, I
 	db := config.ConnectDB()
 	Hash := HashCreation(data.Password)
 	var HashFromDB uint32
-	query := "SELECT hash, id FROM list.manager_list WHERE login = $1"
+	query := "SELECT hash, id FROM list.manager_list WHERE login = $1 and is_active = TRUE"
 	err := db.QueryRow(query, data.Login).Scan(&HashFromDB, &ID)
 	if err != nil {
 		report.ErrorServer(r, err)

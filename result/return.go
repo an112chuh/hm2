@@ -25,4 +25,6 @@ func Headers(w http.ResponseWriter) {
 	w.Header().Set("Cache-Control", "no-store, max-age=0")
 	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:4200")
 	w.Header().Set("Access-Control-Allow-Credentials", "true")
+	w.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "content-type")
 }

@@ -15,6 +15,9 @@ import (
 	"github.com/lib/pq"
 )
 
+var UnknownError string = `Неизвестная ошибка`
+var CtxError string = `Ошибка контекста`
+
 func UserLog(m string, User config.User) {
 	config.UserLogs[User.ID].Printf(m)
 }

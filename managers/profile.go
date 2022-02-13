@@ -73,8 +73,8 @@ type Date struct {
 
 func ProfileHandler(w http.ResponseWriter, r *http.Request) {
 	var res result.ResultInfo
-	IsLogged, user := IsLogin(w, r, true)
-	if !IsLogged {
+	user := IsLogin(w, r, true)
+	if !user.Authenticated {
 		return
 	}
 	res = GetProfile(r, user.ID, user)
@@ -83,7 +83,7 @@ func ProfileHandler(w http.ResponseWriter, r *http.Request) {
 
 func GetProfileHandler(w http.ResponseWriter, r *http.Request) {
 	var res result.ResultInfo
-	_, user := IsLogin(w, r, false)
+	user := IsLogin(w, r, false)
 	vars := mux.Vars(r)
 	id := vars["id"]
 	ID, _ := strconv.Atoi(id)
@@ -93,8 +93,8 @@ func GetProfileHandler(w http.ResponseWriter, r *http.Request) {
 
 func EditProfileHandler(w http.ResponseWriter, r *http.Request) {
 	var res result.ResultInfo
-	IsLogged, user := IsLogin(w, r, true)
-	if !IsLogged {
+	user := IsLogin(w, r, true)
+	if !user.Authenticated {
 		return
 	}
 	res = EditProfile(r, user.ID)
@@ -103,8 +103,8 @@ func EditProfileHandler(w http.ResponseWriter, r *http.Request) {
 
 func EditProfileConfirmHandler(w http.ResponseWriter, r *http.Request) {
 	var res result.ResultInfo
-	IsLogged, user := IsLogin(w, r, true)
-	if !IsLogged {
+	user := IsLogin(w, r, true)
+	if !user.Authenticated {
 		return
 	}
 	var data ProfileManagerEdit
