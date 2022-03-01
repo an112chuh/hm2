@@ -106,7 +106,8 @@ func requestData(r *http.Request) string {
 		requestDump []byte
 		dumpErr     error
 	)
-	// Чтобы httputil.DumpRequest работал с true (давал инфо о Body запроса), нужно в обработчике восстанавливать r.Body поcле прочтения:
+	// Чтобы httputil.DumpRequest работал с true (давал инфо о Body запроса), нужно в обработчике восстанавливать r.Body поcле
+	// прочтения:
 	// Например, в обработчике маршурута (для application/json):
 	// b, _ := io.ReadAll(r.Body)
 	// Тут же восстановление содержания r.Body, иначе оно пустое после прочтения выше.

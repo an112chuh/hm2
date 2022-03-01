@@ -9,6 +9,7 @@ import (
 func GetTeamHandlers(r *mux.Router) {
 	GetCreateTeamHandlers(r)
 	GetRosterHandlers(r)
+	GetFreeTeamsHandlers(r)
 }
 
 func GetCreateTeamHandlers(r *mux.Router) {
@@ -19,5 +20,8 @@ func GetCreateTeamHandlers(r *mux.Router) {
 func GetRosterHandlers(r *mux.Router) {
 	r.HandleFunc("/api/roster/{id:[0-9]+}", teams.RosterHandler).Methods("GET")
 	r.HandleFunc("/api/roster", teams.RosterManagedHandler).Methods("GET")
+}
 
+func GetFreeTeamsHandlers(r *mux.Router) {
+	r.HandleFunc("/api/freeteam", teams.FreeTeamsListHandler).Methods("GET")
 }

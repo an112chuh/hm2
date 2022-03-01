@@ -2,6 +2,7 @@ package players
 
 import (
 	"hm2/config"
+	"hm2/convert"
 	"hm2/managers"
 	"hm2/report"
 	"hm2/result"
@@ -56,13 +57,13 @@ func GetPlayer(r *http.Request, IDPlayer int, user config.User) (res result.Resu
 		report.ErrorSQLServer(r, err, query, params...)
 		return
 	}
-	p.NatString, err = ConvertNationToString(p.Nat)
+	p.NatString, err = convert.NationToString(p.Nat)
 	if err != nil {
 		res = result.SetErrorResult(report.UnknownError)
 		report.ErrorSQLServer(r, err, query, params...)
 		return
 	}
-	p.PosString = ConvertPosToString(p.Pos)
+	p.PosString = convert.PosToString(p.Pos)
 	p.IsGK = false
 	if p.Pos == 0 {
 		p.IsGK = true

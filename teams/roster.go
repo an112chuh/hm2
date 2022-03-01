@@ -3,6 +3,7 @@ package teams
 import (
 	"fmt"
 	"hm2/config"
+	"hm2/convert"
 	"hm2/managers"
 	"hm2/players"
 	"hm2/report"
@@ -65,7 +66,7 @@ func GetRoster(r *http.Request, IDTeam int, user config.User) (res result.Result
 		roster.Manager = name + " " + surname
 	}
 	var p players.PlayerInRoster
-	query = `SELECT id, name,
+	query = `SELECT list.players_list.id, name,
 	surname,
 	pos, 
 	nat,
@@ -93,8 +94,8 @@ func GetRoster(r *http.Request, IDTeam int, user config.User) (res result.Result
 			res = result.SetErrorResult(report.UnknownError)
 			return
 		}
-		p.PosString = players.ConvertPosToString(pos)
-		p.NatString, err = players.ConvertNationToString(p.Nat)
+		p.PosString = convert.PosToString(pos)
+		p.NatString, err = convert.NationToString(p.Nat)
 		if err != nil {
 			report.ErrorServer(r, err)
 			res = result.SetErrorResult(report.UnknownError)

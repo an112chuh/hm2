@@ -27,6 +27,8 @@ func CreateTeamHandler(w http.ResponseWriter, r *http.Request) {
 	var res result.ResultInfo
 	user := managers.IsLogin(w, r, true)
 	if !user.Authenticated {
+		res = result.SetErrorResult(`У вас нет прав для доступа к данной страницы`)
+		result.ReturnJSON(w, &res)
 		return
 	}
 	if user.Rights != config.Admin {
@@ -43,6 +45,8 @@ func CreateTeamConfirmHandler(w http.ResponseWriter, r *http.Request) {
 	var res result.ResultInfo
 	user := managers.IsLogin(w, r, true)
 	if !user.Authenticated {
+		res = result.SetErrorResult(`У вас нет прав для доступа к данной страницы`)
+		result.ReturnJSON(w, &res)
 		return
 	}
 	if user.Rights != config.Admin {
@@ -79,7 +83,7 @@ func CreateTeamConfirm(r *http.Request, data CreateTeamData) (res result.ResultI
 		return
 	}
 	var IDTeam int
-	query := `INSERT into list.team_list (name, country, city, stadium, capacity, vs, cash, manager_id) VALUES ($1, $2, $3, $4, 100, 0, 1000000, -1) RETURNING id`
+	query := `INSERT into list.team_list (name, country, city, stadium, capacity, manager_id) VALUES ($1, $2, $3, $4, 100, -1) RETURNING id`
 	params := []interface{}{data.Name, data.Country, data.City, data.Stadium}
 	err = tx.QueryRowContext(ctx, query, params...).Scan(&IDTeam)
 	if err != nil {
@@ -97,10 +101,23 @@ func CreateTeamConfirm(r *http.Request, data CreateTeamData) (res result.ResultI
 		res = result.SetErrorResult(`Ошибка при создании баз команд`)
 		return
 	}
-	tx, err = players.CreatePlayers(r, tx, IDTeam, data.Name, data.Country)
+	tx, str, err := players.CreatePlayers(r, tx, IDTeam, data.Name, data.Country)
 	if err != nil {
 		report.ErrorServer(r, err)
 		res = result.SetErrorResult(`Ошибка при создании баз команд`)
+		return
+	}
+	query = `INSERT into teams.data (team_id, name, str, players_num, avg_str, cash, cost, price, is_auction) VALUES ($1, $2, $3, 31, $4, 1000000, 50000000, 5, true)`
+	params = []interface{}{IDTeam, data.Name, str, float64(str) / 31}
+	_, err = tx.ExecContext(ctx, query, params...)
+	if err != nil {
+		switch {
+		case errors.Is(ctx.Err(), context.Canceled), errors.Is(ctx.Err(), context.DeadlineExceeded):
+			res = result.SetErrorResult(report.CtxError)
+		default:
+			report.ErrorSQLServer(r, err, query, params...)
+			res = result.SetErrorResult(report.UnknownError)
+		}
 		return
 	}
 	if err = tx.Commit(); err != nil {

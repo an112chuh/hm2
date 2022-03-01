@@ -3,8 +3,8 @@ package players
 import (
 	"database/sql"
 	"fmt"
-	"hm2/config"
 	"hm2/constants"
+	"hm2/convert"
 	"hm2/report"
 	"io"
 	"math/rand"
@@ -84,8 +84,9 @@ type AgeWithStr struct {
 	Str int
 }
 
-func CreatePlayers(r *http.Request, tx *sql.Tx, IDTeam int, NameTeam string, Country string) (*sql.Tx, error) {
+func CreatePlayers(r *http.Request, tx *sql.Tx, IDTeam int, NameTeam string, Country string) (*sql.Tx, int, error) {
 	var p Player
+	str := 0
 	var Stats [constants.NumOfSkills]int
 	query := `SELECT id, short FROM list.nation_list where name = $1`
 	params := []interface{}{Country}
@@ -93,13 +94,16 @@ func CreatePlayers(r *http.Request, tx *sql.Tx, IDTeam int, NameTeam string, Cou
 	err := tx.QueryRowContext(ctx, query, params...).Scan(&p.Nat, &p.NatString)
 	if err != nil {
 		report.ErrorSQLServer(r, err, query, params...)
-		return tx, err
+		return tx, str, err
 	}
 	caps := "txt_files/names/" + s.ToUpper(p.NatString)
 	NamesList := ScanNameFromFile(r, caps+"n.txt")
 	SurnamesList := ScanNameFromFile(r, caps+"s.txt")
 	TeamAges := []AgeWithStr{{16, 42}, {17, 46}, {18, 51}, {19, 54}, {20, 58}, {21, 63}, {22, 65}, {23, 66}, {24, 67}, {25, 69}, {26, 70}, {27, 71}, {28, 72}, {29, 74}, {30, 75}, {31, 76}, {32, 77}, {33, 78}, {34, 80}, {35, 81}, {36, 80}, {37, 74}, {38, 67}, {39, 59},
 		{18, 61}, {21, 74}, {24, 81}, {25, 84}, {27, 87}, {30, 90}, {33, 86}}
+	for i := 0; i < len(TeamAges); i++ {
+		str += TeamAges[i].Str
+	}
 	rand.Shuffle(len(TeamAges), func(i, j int) {
 		TeamAges[i], TeamAges[j] = TeamAges[j], TeamAges[i]
 	})
@@ -146,7 +150,7 @@ func CreatePlayers(r *http.Request, tx *sql.Tx, IDTeam int, NameTeam string, Cou
 		err = tx.QueryRowContext(ctx, query, params...).Scan(&IDPlayer)
 		if err != nil {
 			report.ErrorSQLServer(r, err, query, params...)
-			return tx, err
+			return tx, str, err
 		}
 		if i < 3 {
 			query = `INSERT into players.gk_skills (
@@ -163,7 +167,7 @@ func CreatePlayers(r *http.Request, tx *sql.Tx, IDTeam int, NameTeam string, Cou
 			_, err = tx.ExecContext(ctx, query, params...)
 			if err != nil {
 				report.ErrorSQLServer(r, err, query, params...)
-				return tx, err
+				return tx, str, err
 			}
 		}
 		if i > 2 {
@@ -193,7 +197,7 @@ func CreatePlayers(r *http.Request, tx *sql.Tx, IDTeam int, NameTeam string, Cou
 				resistance, 
 				faceoff, 
 				side) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)`
-			p.PosString = ConvertPosToString(p.Pos)
+			p.PosString = convert.PosToString(p.Pos)
 			params := []interface{}{IDPlayer, IDTeam, p.PosString, p.Skills.Speed,
 				p.Skills.Skating,
 				p.Skills.SlapShot,
@@ -209,7 +213,7 @@ func CreatePlayers(r *http.Request, tx *sql.Tx, IDTeam int, NameTeam string, Cou
 			_, err = tx.ExecContext(ctx, query, params...)
 			if err != nil {
 				report.ErrorSQLServer(r, err, query, params...)
-				return tx, err
+				return tx, str, err
 			}
 		}
 		query = `INSERT into players.history (player_id, team_id, team_name, GP, G, A, P, PIM, PM, SOG, SOfG, rating) VALUES ($1, $2, $3, 0,0,0,0,0,0,0,0,0)`
@@ -217,10 +221,10 @@ func CreatePlayers(r *http.Request, tx *sql.Tx, IDTeam int, NameTeam string, Cou
 		_, err = tx.ExecContext(ctx, query, params...)
 		if err != nil {
 			report.ErrorSQLServer(r, err, query, params...)
-			return tx, err
+			return tx, str, err
 		}
 	}
-	return tx, err
+	return tx, str, err
 }
 
 func GenerateGoaliesStats(base AgeWithStr) GKSkills {
@@ -344,31 +348,4 @@ func CheckStrength(Sk [constants.NumOfSkills]int, MaxSkill int, pos int) bool {
 		return true
 	}
 	return false
-}
-
-func ConvertPosToString(pos int) string {
-	switch pos {
-	case 0:
-		return "GK"
-	case 1:
-		return "LD"
-	case 2:
-		return "RD"
-	case 3:
-		return "LW"
-	case 4:
-		return "C"
-	case 5:
-		return "RW"
-	}
-	return "ERROR"
-}
-
-func ConvertNationToString(nat int) (string, error) {
-	var res string
-	db := config.ConnectDB()
-	query := `SELECT short from list.nation_list where id = $1`
-	params := []interface{}{nat}
-	err := db.QueryRow(query, params...).Scan(&res)
-	return res, err
 }
