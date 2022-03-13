@@ -14,8 +14,8 @@ func GetTeamHandlers(r *mux.Router) {
 }
 
 func GetCreateTeamHandlers(r *mux.Router) {
-	r.HandleFunc("/adm/api/team/edit", teams.CreateTeamHandler).Methods("GET")
-	r.HandleFunc("/adm/api/team/edit", teams.CreateTeamConfirmHandler).Methods("POST")
+	r.HandleFunc("/adm/api/create_team", teams.CreateTeamHandler).Methods("GET")
+	r.HandleFunc("/adm/api/create_team", teams.CreateTeamConfirmHandler).Methods("POST")
 }
 
 func GetRosterHandlers(r *mux.Router) {
