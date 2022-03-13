@@ -1260,3 +1260,183 @@ User-Agent: PostmanRuntime/7.29.0
 
 ERROR 2022/03/01 20:58:21 report.go:59: ——————————————————————————————————————————————————————————————————————
 ERROR 2022/03/01 20:58:21 report.go:60: 
+ERROR 2022/03/13 15:14:37 report.go:58: 13.03.2022 15:14:37
+D:/hm2/teams/teams_buy.go:105
+pq: отношение "list.managers_list" не существует
+
+SELECT vip, team_num, team1, team2, team3 from list.managers_list where id = 10
+
+&pq.Error{Severity:"ОШИБКА", Code:"42P01", Message:"отношение \"list.managers_list\" не существует", Detail:"", Hint:"", Position:"48", InternalPosition:"", InternalQuery:"", Where:"", Schema:"", Table:"", Column:"", DataTypeName:"", Constraint:"", File:"parse_relation.c", Line:"1363", Routine:"parserOpenTable"}
+
+GET /api/roster/5/buy HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Cookie: cookie-name=MTY0NzE3MzYxMXx4dnlrOEZNcmNwNTdxXzdJbk1ybm9iQnh4RFlnUVZ1Q0ZMUmJfc3dfMEFvM0pHVVV5Y2dOQXVfVkY3Y3NUUDVKV2tXVUdOSmIxVUJMdDhqNXdDMTJEbmp1cHBDOC1Fb0lfM0J6bEo4Z3QtdHpIbl9ZaEtRbmhBdHp6Q2Z6NWo3YU5fNTU4Rzk3d2VOcUd2OTZETXlsaVNoTHBWU01rOFhsSVo0YWhvNUR6SFRhaUhfMXJjWGJDZWZwSnRyNlBDdTdvU0h1a2NqQldyUT184f5IWxTrnrbScmM8EBtPydKmx3IrswaU5lLxgOlrt3I=
+Postman-Token: 0e9981ed-e316-4f0f-9961-99d5fcce0fe8
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/03/13 15:14:37 report.go:59: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/03/13 15:14:37 report.go:60: 
+ERROR 2022/03/13 15:15:02 report.go:58: 13.03.2022 15:15:02
+D:/hm2/teams/teams_buy.go:105
+sql: Scan error on column index 0, name "vip": converting NULL to int is unsupported
+
+SELECT vip, team_num, team1, team2, team3 from list.manager_list where id = 10
+
+&pq.Error{Severity:"", Code:"", Message:"", Detail:"", Hint:"", Position:"", InternalPosition:"", InternalQuery:"", Where:"", Schema:"", Table:"", Column:"", DataTypeName:"", Constraint:"", File:"", Line:"", Routine:""}
+
+GET /api/roster/5/buy HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Cookie: cookie-name=MTY0NzE3MzYxMXx4dnlrOEZNcmNwNTdxXzdJbk1ybm9iQnh4RFlnUVZ1Q0ZMUmJfc3dfMEFvM0pHVVV5Y2dOQXVfVkY3Y3NUUDVKV2tXVUdOSmIxVUJMdDhqNXdDMTJEbmp1cHBDOC1Fb0lfM0J6bEo4Z3QtdHpIbl9ZaEtRbmhBdHp6Q2Z6NWo3YU5fNTU4Rzk3d2VOcUd2OTZETXlsaVNoTHBWU01rOFhsSVo0YWhvNUR6SFRhaUhfMXJjWGJDZWZwSnRyNlBDdTdvU0h1a2NqQldyUT184f5IWxTrnrbScmM8EBtPydKmx3IrswaU5lLxgOlrt3I=
+Postman-Token: f50025bb-b5df-45c7-aab7-b107853f5217
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/03/13 15:15:02 report.go:59: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/03/13 15:15:02 report.go:60: 
+ERROR 2022/03/13 21:40:30 report.go:58: 13.03.2022 21:40:30
+D:/hm2/teams/teams_buy.go:256
+pq: отношение "list.teams_list" не существует
+
+SELECT country from list.teams_list where id = 5
+
+&pq.Error{Severity:"ОШИБКА", Code:"42P01", Message:"отношение \"list.teams_list\" не существует", Detail:"", Hint:"", Position:"21", InternalPosition:"", InternalQuery:"", Where:"", Schema:"", Table:"", Column:"", DataTypeName:"", Constraint:"", File:"parse_relation.c", Line:"1363", Routine:"parserOpenTable"}
+
+GET /api/roster/5/buy HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Cookie: cookie-name=MTY0NzE3MzYxMXx4dnlrOEZNcmNwNTdxXzdJbk1ybm9iQnh4RFlnUVZ1Q0ZMUmJfc3dfMEFvM0pHVVV5Y2dOQXVfVkY3Y3NUUDVKV2tXVUdOSmIxVUJMdDhqNXdDMTJEbmp1cHBDOC1Fb0lfM0J6bEo4Z3QtdHpIbl9ZaEtRbmhBdHp6Q2Z6NWo3YU5fNTU4Rzk3d2VOcUd2OTZETXlsaVNoTHBWU01rOFhsSVo0YWhvNUR6SFRhaUhfMXJjWGJDZWZwSnRyNlBDdTdvU0h1a2NqQldyUT184f5IWxTrnrbScmM8EBtPydKmx3IrswaU5lLxgOlrt3I=
+Postman-Token: cdd5dfef-41a3-4fa6-8ff4-e733eb745e6c
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/03/13 21:40:30 report.go:59: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/03/13 21:40:30 report.go:60: 
+ERROR 2022/03/13 21:41:01 report.go:58: 13.03.2022 21:41:01
+D:/hm2/teams/teams_buy.go:177
+pq: отношение "list.teams_list" не существует
+
+SELECT manager_id from list.teams_list where id = 5
+
+&pq.Error{Severity:"ОШИБКА", Code:"42P01", Message:"отношение \"list.teams_list\" не существует", Detail:"", Hint:"", Position:"24", InternalPosition:"", InternalQuery:"", Where:"", Schema:"", Table:"", Column:"", DataTypeName:"", Constraint:"", File:"parse_relation.c", Line:"1363", Routine:"parserOpenTable"}
+
+GET /api/roster/5/buy HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Cookie: cookie-name=MTY0NzE3MzYxMXx4dnlrOEZNcmNwNTdxXzdJbk1ybm9iQnh4RFlnUVZ1Q0ZMUmJfc3dfMEFvM0pHVVV5Y2dOQXVfVkY3Y3NUUDVKV2tXVUdOSmIxVUJMdDhqNXdDMTJEbmp1cHBDOC1Fb0lfM0J6bEo4Z3QtdHpIbl9ZaEtRbmhBdHp6Q2Z6NWo3YU5fNTU4Rzk3d2VOcUd2OTZETXlsaVNoTHBWU01rOFhsSVo0YWhvNUR6SFRhaUhfMXJjWGJDZWZwSnRyNlBDdTdvU0h1a2NqQldyUT184f5IWxTrnrbScmM8EBtPydKmx3IrswaU5lLxgOlrt3I=
+Postman-Token: 8b4c3483-bf7b-4b29-968d-fee9d3c1e340
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/03/13 21:41:01 report.go:59: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/03/13 21:41:01 report.go:60: 
+ERROR 2022/03/13 21:45:12 report.go:58: 13.03.2022 21:45:12
+D:/hm2/teams/teams_buy.go:216
+pq: столбец "team2" имеет тип integer, а выражение - boolean
+
+UPDATE list.manager_list SET team2 = 5 AND team_num = team_num + 1 WHERE id = 10
+
+&pq.Error{Severity:"ОШИБКА", Code:"42804", Message:"столбец \"team2\" имеет тип integer, а выражение - boolean", Detail:"", Hint:"Перепишите выражение или преобразуйте его тип.", Position:"38", InternalPosition:"", InternalQuery:"", Where:"", Schema:"", Table:"", Column:"", DataTypeName:"", Constraint:"", File:"parse_target.c", Line:"595", Routine:"transformAssignedExpr"}
+
+GET /api/roster/5/buy HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Cookie: cookie-name=MTY0NzE3MzYxMXx4dnlrOEZNcmNwNTdxXzdJbk1ybm9iQnh4RFlnUVZ1Q0ZMUmJfc3dfMEFvM0pHVVV5Y2dOQXVfVkY3Y3NUUDVKV2tXVUdOSmIxVUJMdDhqNXdDMTJEbmp1cHBDOC1Fb0lfM0J6bEo4Z3QtdHpIbl9ZaEtRbmhBdHp6Q2Z6NWo3YU5fNTU4Rzk3d2VOcUd2OTZETXlsaVNoTHBWU01rOFhsSVo0YWhvNUR6SFRhaUhfMXJjWGJDZWZwSnRyNlBDdTdvU0h1a2NqQldyUT184f5IWxTrnrbScmM8EBtPydKmx3IrswaU5lLxgOlrt3I=
+Postman-Token: 421f2c9b-a5f3-479f-9527-a5d085d41f0b
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/03/13 21:45:12 report.go:59: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/03/13 21:45:12 report.go:60: 
+ERROR 2022/03/14 01:03:20 report.go:58: 14.03.2022 01:03:20
+D:/hm2/teams/buy.go:298
+sql: no rows in result set
+
+SELECT price from teams.data where id = 8
+
+&pq.Error{Severity:"", Code:"", Message:"", Detail:"", Hint:"", Position:"", InternalPosition:"", InternalQuery:"", Where:"", Schema:"", Table:"", Column:"", DataTypeName:"", Constraint:"", File:"", Line:"", Routine:""}
+
+GET /api/roster/8/sell HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Cookie: cookie-name=MTY0NzE3MzYxMXx4dnlrOEZNcmNwNTdxXzdJbk1ybm9iQnh4RFlnUVZ1Q0ZMUmJfc3dfMEFvM0pHVVV5Y2dOQXVfVkY3Y3NUUDVKV2tXVUdOSmIxVUJMdDhqNXdDMTJEbmp1cHBDOC1Fb0lfM0J6bEo4Z3QtdHpIbl9ZaEtRbmhBdHp6Q2Z6NWo3YU5fNTU4Rzk3d2VOcUd2OTZETXlsaVNoTHBWU01rOFhsSVo0YWhvNUR6SFRhaUhfMXJjWGJDZWZwSnRyNlBDdTdvU0h1a2NqQldyUT184f5IWxTrnrbScmM8EBtPydKmx3IrswaU5lLxgOlrt3I=
+Postman-Token: 1a5bddf4-0a35-422f-a212-770c726bb465
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/03/14 01:03:20 report.go:59: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/03/14 01:03:20 report.go:60: 
+ERROR 2022/03/14 01:04:00 report.go:58: 14.03.2022 01:04:00
+D:/hm2/teams/buy.go:312
+expected a struct, but struct ManagerTeams has no exported fields
+
+SELECT team1, team2, team3 from list.manager_list where id = 10
+
+&pq.Error{Severity:"", Code:"", Message:"", Detail:"", Hint:"", Position:"", InternalPosition:"", InternalQuery:"", Where:"", Schema:"", Table:"", Column:"", DataTypeName:"", Constraint:"", File:"", Line:"", Routine:""}
+
+GET /api/roster/8/sell HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Cookie: cookie-name=MTY0NzE3MzYxMXx4dnlrOEZNcmNwNTdxXzdJbk1ybm9iQnh4RFlnUVZ1Q0ZMUmJfc3dfMEFvM0pHVVV5Y2dOQXVfVkY3Y3NUUDVKV2tXVUdOSmIxVUJMdDhqNXdDMTJEbmp1cHBDOC1Fb0lfM0J6bEo4Z3QtdHpIbl9ZaEtRbmhBdHp6Q2Z6NWo3YU5fNTU4Rzk3d2VOcUd2OTZETXlsaVNoTHBWU01rOFhsSVo0YWhvNUR6SFRhaUhfMXJjWGJDZWZwSnRyNlBDdTdvU0h1a2NqQldyUT184f5IWxTrnrbScmM8EBtPydKmx3IrswaU5lLxgOlrt3I=
+Postman-Token: a9d65c93-ddbc-4e52-ab43-791cd2cb9eee
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/03/14 01:04:00 report.go:59: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/03/14 01:04:00 report.go:60: 
+ERROR 2022/03/14 01:07:52 report.go:58: 14.03.2022 01:07:52
+D:/hm2/teams/buy.go:345
+pq: многочисленные присвоения одному столбцу "team1"
+
+UPDATE list.manager_list SET team1 = 0, team1 = team2, team2 = team3, team3 = 0 where id = 10
+
+&pq.Error{Severity:"ОШИБКА", Code:"42601", Message:"многочисленные присвоения одному столбцу \"team1\"", Detail:"", Hint:"", Position:"", InternalPosition:"", InternalQuery:"", Where:"", Schema:"", Table:"", Column:"", DataTypeName:"", Constraint:"", File:"rewritehandler.c", Line:"1088", Routine:"process_matched_tle"}
+
+GET /api/roster/8/sell HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Cookie: cookie-name=MTY0NzE3MzYxMXx4dnlrOEZNcmNwNTdxXzdJbk1ybm9iQnh4RFlnUVZ1Q0ZMUmJfc3dfMEFvM0pHVVV5Y2dOQXVfVkY3Y3NUUDVKV2tXVUdOSmIxVUJMdDhqNXdDMTJEbmp1cHBDOC1Fb0lfM0J6bEo4Z3QtdHpIbl9ZaEtRbmhBdHp6Q2Z6NWo3YU5fNTU4Rzk3d2VOcUd2OTZETXlsaVNoTHBWU01rOFhsSVo0YWhvNUR6SFRhaUhfMXJjWGJDZWZwSnRyNlBDdTdvU0h1a2NqQldyUT184f5IWxTrnrbScmM8EBtPydKmx3IrswaU5lLxgOlrt3I=
+Postman-Token: 84d27c3b-268a-4694-8c1f-a9ff9a503a38
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/03/14 01:07:52 report.go:59: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/03/14 01:07:52 report.go:60: 
+ERROR 2022/03/14 01:10:11 report.go:58: 14.03.2022 01:10:11
+D:/hm2/teams/buy.go:370
+pq: ошибка синтаксиса (примерное положение: "ORDER")
+
+UPDATE managers.history SET date_finish = '2022-03-14 01:10:11.607' WHERE manager_id = 10 AND team_id = 8 ORDER BY id DESC LIMIT 1
+
+&pq.Error{Severity:"ОШИБКА", Code:"42601", Message:"ошибка синтаксиса (примерное положение: \"ORDER\")", Detail:"", Hint:"", Position:"85", InternalPosition:"", InternalQuery:"", Where:"", Schema:"", Table:"", Column:"", DataTypeName:"", Constraint:"", File:"scan.l", Line:"1180", Routine:"scanner_yyerror"}
+
+GET /api/roster/8/sell HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Cookie: cookie-name=MTY0NzE3MzYxMXx4dnlrOEZNcmNwNTdxXzdJbk1ybm9iQnh4RFlnUVZ1Q0ZMUmJfc3dfMEFvM0pHVVV5Y2dOQXVfVkY3Y3NUUDVKV2tXVUdOSmIxVUJMdDhqNXdDMTJEbmp1cHBDOC1Fb0lfM0J6bEo4Z3QtdHpIbl9ZaEtRbmhBdHp6Q2Z6NWo3YU5fNTU4Rzk3d2VOcUd2OTZETXlsaVNoTHBWU01rOFhsSVo0YWhvNUR6SFRhaUhfMXJjWGJDZWZwSnRyNlBDdTdvU0h1a2NqQldyUT184f5IWxTrnrbScmM8EBtPydKmx3IrswaU5lLxgOlrt3I=
+Postman-Token: e6b1a352-aa42-4609-b2ec-454d6b9feea6
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/03/14 01:10:11 report.go:59: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/03/14 01:10:11 report.go:60: 
