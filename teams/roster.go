@@ -85,6 +85,7 @@ func GetRoster(r *http.Request, IDTeam int, user config.User) (res result.Result
 		res = result.SetErrorResult(report.UnknownError)
 		return
 	}
+	defer rows.Close()
 	for rows.Next() {
 		var pos int
 		err = rows.Scan(&p.ID, &p.Name, &p.Surname, &pos, &p.Nat, &p.Age, &p.Str, &p.Style, &p.Morale, &p.Readyness, &p.Tireness, &p.Price,

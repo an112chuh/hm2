@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"hm2/config"
-	"hm2/convert"
+	"hm2/get"
 	"hm2/managers"
 	"hm2/report"
 	"hm2/result"
@@ -140,32 +140,56 @@ func BuyTeam(r *http.Request, IDTeam int, user config.User) (res result.ResultIn
 		res = result.SetErrorResult("Достигнут лимит для взятия команд. Пожалуйста, откажитесь от одной из команд перед покупкой другой")
 		return
 	}
-	NewTeamNation, err := GetNationIDByTeam(r, ctx, IDTeam)
+	NewTeamNation, err := get.NationIDByTeam(ctx, IDTeam)
 	if err != nil {
-		res = result.SetErrorResult(err.Error())
+		switch {
+		case errors.Is(ctx.Err(), context.Canceled), errors.Is(ctx.Err(), context.DeadlineExceeded):
+			res = result.SetErrorResult(report.CtxError)
+		default:
+			report.ErrorSQLServer(r, err, query, params...)
+			res = result.SetErrorResult(report.UnknownError)
+		}
 		return
 	}
 	var TeamNationsExist []int
 	if TeamsHave.Team1 > 0 {
-		HaveTeamNat, err := GetNationIDByTeam(r, ctx, TeamsHave.Team1)
+		HaveTeamNat, err := get.NationIDByTeam(ctx, TeamsHave.Team1)
 		if err != nil {
-			res = result.SetErrorResult(err.Error())
+			switch {
+			case errors.Is(ctx.Err(), context.Canceled), errors.Is(ctx.Err(), context.DeadlineExceeded):
+				res = result.SetErrorResult(report.CtxError)
+			default:
+				report.ErrorSQLServer(r, err, query, params...)
+				res = result.SetErrorResult(report.UnknownError)
+			}
 			return
 		}
 		TeamNationsExist = append(TeamNationsExist, HaveTeamNat)
 	}
 	if TeamsHave.Team2 > 0 {
-		HaveTeamNat, err := GetNationIDByTeam(r, ctx, TeamsHave.Team2)
+		HaveTeamNat, err := get.NationIDByTeam(ctx, TeamsHave.Team2)
 		if err != nil {
-			res = result.SetErrorResult(err.Error())
+			switch {
+			case errors.Is(ctx.Err(), context.Canceled), errors.Is(ctx.Err(), context.DeadlineExceeded):
+				res = result.SetErrorResult(report.CtxError)
+			default:
+				report.ErrorSQLServer(r, err, query, params...)
+				res = result.SetErrorResult(report.UnknownError)
+			}
 			return
 		}
 		TeamNationsExist = append(TeamNationsExist, HaveTeamNat)
 	}
 	if TeamsHave.Team3 > 0 {
-		HaveTeamNat, err := GetNationIDByTeam(r, ctx, TeamsHave.Team3)
+		HaveTeamNat, err := get.NationIDByTeam(ctx, TeamsHave.Team3)
 		if err != nil {
-			res = result.SetErrorResult(err.Error())
+			switch {
+			case errors.Is(ctx.Err(), context.Canceled), errors.Is(ctx.Err(), context.DeadlineExceeded):
+				res = result.SetErrorResult(report.CtxError)
+			default:
+				report.ErrorSQLServer(r, err, query, params...)
+				res = result.SetErrorResult(report.UnknownError)
+			}
 			return
 		}
 		TeamNationsExist = append(TeamNationsExist, HaveTeamNat)
@@ -407,28 +431,4 @@ func SellTeam(r *http.Request, IDTeam int, user config.User) (res result.ResultI
 	res.Done = true
 	res.Items = IDTeam
 	return
-}
-
-func GetNationIDByTeam(r *http.Request, ctx context.Context, TeamID int) (int, error) {
-	db := config.ConnectDB()
-	var TeamString string
-	var NationID int
-	query := `SELECT country from list.team_list where id = $1`
-	params := []interface{}{TeamID}
-	err := db.QueryRowContext(ctx, query, params...).Scan(&TeamString)
-	if err != nil {
-		switch {
-		case errors.Is(ctx.Err(), context.Canceled), errors.Is(ctx.Err(), context.DeadlineExceeded):
-			return -1, errors.New(report.CtxError)
-		default:
-			report.ErrorSQLServer(r, err, query, params...)
-			return -1, errors.New(report.UnknownError)
-		}
-	}
-	NationID, err = convert.NationToInt(TeamString)
-	if err != nil {
-		report.ErrorServer(r, err)
-		return -1, err
-	}
-	return NationID, nil
 }

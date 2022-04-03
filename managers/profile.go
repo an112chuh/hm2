@@ -2,8 +2,12 @@ package managers
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
+	"errors"
 	"hm2/config"
+	"hm2/convert"
+	"hm2/get"
 	"hm2/report"
 	"hm2/result"
 	"io"
@@ -53,22 +57,31 @@ type ProfileManagerTeams struct {
 }
 
 type ProfileManagerStats struct {
-	SeasonStart int    `json:"seasonstart"`
-	DateStart   string `json:"datestart"`
-	SeasonEnd   int    `json:"seasonend"`
-	DateEnd     string `json:"dateend"`
-	Team        string `json:"team"`
-	TeamID      int    `json:"teamid"`
-	GP          int    `json:"gp"`
-	W           int    `json:"w"`
-	L           int    `json:"l"`
-	TrophyNum   int    `json:"trophynum"`
+	DateStart string  `json:"datestart"`
+	DateEnd   *string `json:"dateend"`
+	Team      string  `json:"team"`
+	TeamID    int     `json:"teamid"`
+	GP        int     `json:"gp"`
+	W         int     `json:"w"`
+	WO        int     `json:"wo"`
+	WS        int     `json:"ws"`
+	LS        int     `json:"ls"`
+	LO        int     `json:"lo"`
+	L         int     `json:"l"`
+	TrophyNum int     `json:"trophynum"`
 }
 
 type Date struct {
 	Day   int
 	Month int
 	Year  int
+}
+
+type ManagerTeams struct {
+	Team1      int `db:"team1"`
+	Team2      int `db:"team2"`
+	Team3      int `db:"team3"`
+	NumOfTeams int `db:"team_num"`
 }
 
 func ProfileHandler(w http.ResponseWriter, r *http.Request) {
@@ -122,6 +135,7 @@ func EditProfileConfirmHandler(w http.ResponseWriter, r *http.Request) {
 func GetProfile(r *http.Request, ID int, user config.User) (res result.ResultInfo) {
 	var data ProfileManager
 	db := config.ConnectDB()
+	ctx := r.Context()
 	IsProfileExist := CheckProfileExist(r, ID)
 	if !IsProfileExist {
 		res = result.SetErrorResult(`Данного профиля не существует`)
@@ -134,10 +148,15 @@ func GetProfile(r *http.Request, ID int, user config.User) (res result.ResultInf
 	data.ID = ID
 	var created, last_online time.Time
 	query := `SELECT login, mail, created_at, last_online from list.manager_list where id = $1`
-	err := db.QueryRow(query, ID).Scan(&data.NickName, &data.Mail, &created, &last_online)
+	err := db.QueryRowContext(ctx, query, ID).Scan(&data.NickName, &data.Mail, &created, &last_online)
 	if err != nil {
-		res = result.SetErrorResult(`Ошибка сервера`)
-		report.ErrorServer(r, err)
+		switch {
+		case errors.Is(ctx.Err(), context.Canceled), errors.Is(ctx.Err(), context.DeadlineExceeded):
+			res = result.SetErrorResult(report.CtxError)
+		default:
+			report.ErrorSQLServer(r, err, query, ID)
+			res = result.SetErrorResult(report.UnknownError)
+		}
 		return
 	}
 	data.Created = created.Format("02.01.2006 15:04")
@@ -149,17 +168,42 @@ func GetProfile(r *http.Request, ID int, user config.User) (res result.ResultInf
 	var d Date
 	var name, surname, country, city string
 	query = `SELECT name, surname, sex, country, city, birthd, birthm, birthy, img from managers.data WHERE id=$1`
-	err = db.QueryRow(query, ID).Scan(&name, &surname, &data.Sex, &country, &city, &d.Day, &d.Month, &d.Year, &data.Img)
+	err = db.QueryRowContext(ctx, query, ID).Scan(&name, &surname, &data.Sex, &country, &city, &d.Day, &d.Month, &d.Year, &data.Img)
 	if err != nil {
-		res = result.SetErrorResult(`Ошибка сервера`)
-		report.ErrorServer(r, err)
+		switch {
+		case errors.Is(ctx.Err(), context.Canceled), errors.Is(ctx.Err(), context.DeadlineExceeded):
+			res = result.SetErrorResult(report.CtxError)
+		default:
+			report.ErrorSQLServer(r, err, query, ID)
+			res = result.SetErrorResult(report.UnknownError)
+		}
 		return
 	}
 	data.Name = name + " " + surname
 	data.City = country + ", " + city
 	data.Birth = DateToString(d)
-	data.Teams = FillTeamsTest()
-	data.Stat = FillStatsTest()
+	data.Teams, err = FillTeamsTest(ctx, ID)
+	if err != nil {
+		switch {
+		case errors.Is(ctx.Err(), context.Canceled), errors.Is(ctx.Err(), context.DeadlineExceeded):
+			res = result.SetErrorResult(report.CtxError)
+		default:
+			report.ErrorSQLServer(r, err, query, ID)
+			res = result.SetErrorResult(report.UnknownError)
+		}
+		return
+	}
+	data.Stat, err = FillStatsTest(ctx, ID)
+	if err != nil {
+		switch {
+		case errors.Is(ctx.Err(), context.Canceled), errors.Is(ctx.Err(), context.DeadlineExceeded):
+			res = result.SetErrorResult(report.CtxError)
+		default:
+			report.ErrorSQLServer(r, err, query, ID)
+			res = result.SetErrorResult(report.UnknownError)
+		}
+		return
+	}
 	res.Done = true
 	res.Items = data
 	return res
@@ -168,16 +212,22 @@ func GetProfile(r *http.Request, ID int, user config.User) (res result.ResultInf
 func EditProfile(r *http.Request, ID int) (res result.ResultInfo) {
 	data := []ProfileManagerEdit{}
 	db := config.ConnectDB()
+	ctx := r.Context()
 	IsProfileExist := CheckProfileExist(r, ID)
 	if !IsProfileExist {
 		res = result.SetErrorResult(`Данного профиля не существует`)
 		return
 	}
 	query := `SELECT name, surname, sex, country, city, birthd, birthm, birthy, img from managers.data WHERE id=$1`
-	err := db.Select(&data, query, ID)
+	err := db.SelectContext(ctx, &data, query, ID)
 	if err != nil {
-		res = result.SetErrorResult(`Ошибка сервера`)
-		report.ErrorServer(r, err)
+		switch {
+		case errors.Is(ctx.Err(), context.Canceled), errors.Is(ctx.Err(), context.DeadlineExceeded):
+			res = result.SetErrorResult(report.CtxError)
+		default:
+			report.ErrorSQLServer(r, err, query, ID)
+			res = result.SetErrorResult(report.UnknownError)
+		}
 		return
 	}
 	for i := 0; i < len(data); i++ {
@@ -190,6 +240,7 @@ func EditProfile(r *http.Request, ID int) (res result.ResultInfo) {
 
 func EditProfileConfirm(r *http.Request, data ProfileManagerEdit) (res result.ResultInfo) {
 	db := config.ConnectDB()
+	ctx := r.Context()
 	IsProfileExist := CheckProfileExist(r, data.ID)
 	if !IsProfileExist {
 		res = result.SetErrorResult(`Данного профиля не существует`)
@@ -207,10 +258,15 @@ func EditProfileConfirm(r *http.Request, data ProfileManagerEdit) (res result.Re
 	img = $9
 	WHERE id = $10`
 	params := []interface{}{data.Name, data.Surname, data.Sex, data.Country, data.City, data.BirthD, data.BirthM, data.BirthY, data.Img, data.ID}
-	_, err := db.Exec(query, params...)
+	_, err := db.ExecContext(ctx, query, params...)
 	if err != nil {
-		res = result.SetErrorResult(``)
-		report.ErrorServer(r, err)
+		switch {
+		case errors.Is(ctx.Err(), context.Canceled), errors.Is(ctx.Err(), context.DeadlineExceeded):
+			res = result.SetErrorResult(report.CtxError)
+		default:
+			report.ErrorSQLServer(r, err, query, params...)
+			res = result.SetErrorResult(report.UnknownError)
+		}
 		return
 	}
 	res.Done = true
@@ -218,36 +274,54 @@ func EditProfileConfirm(r *http.Request, data ProfileManagerEdit) (res result.Re
 	return res
 }
 
-func FillTeamsTest() (res []ProfileManagerTeams) {
+func FillTeamsTest(ctx context.Context, IDManager int) (res []ProfileManagerTeams, err error) {
+	db := config.ConnectDB()
 	var p ProfileManagerTeams
-	for i := 0; i < 3; i++ {
-		p.Country = "testctr" + strconv.Itoa(i)
-		p.CountryID = i
+	TeamsID, err := get.TeamsByManager(ctx, IDManager)
+	if err != nil {
+		return nil, err
+	}
+	for i := range TeamsID {
+		query := `SELECT name, country FROM list.team_list WHERE id = $1`
+		params := []interface{}{TeamsID[i]}
+		err = db.QueryRowContext(ctx, query, params...).Scan(&p.Team, &p.Country)
+		if err != nil {
+			return nil, err
+		}
+		p.TeamID = TeamsID[i]
+		p.CountryID, err = convert.NationToInt(p.Country)
+		if err != nil {
+			return nil, err
+		}
 		p.Division = "testdiv" + strconv.Itoa(i)
 		p.DivisionID = i
-		p.Team = "testteam" + strconv.Itoa(i)
-		p.TeamID = i
 		res = append(res, p)
 	}
-	return res
+	return res, nil
 }
 
-func FillStatsTest() (res []ProfileManagerStats) {
+func FillStatsTest(ctx context.Context, IDManager int) (res []ProfileManagerStats, err error) {
 	var p ProfileManagerStats
-	for i := 0; i < 3; i++ {
-		p.DateStart = "0" + strconv.Itoa(2+i) + ".02.2022"
-		p.DateEnd = "0" + strconv.Itoa(5+i) + ".02.2022"
-		p.GP = i
-		p.L = i - 1
-		p.SeasonEnd = i + 4
-		p.SeasonStart = i + 2
-		p.Team = "testteam" + strconv.Itoa(i)
-		p.TeamID = i
-		p.TrophyNum = i
-		p.W = 1
+	db := config.ConnectDB()
+	query := `SELECT date_start, date_finish, team_name, G, W, WO, WS, LS, LO, L, trophies FROM managers.history WHERE manager_id = $1 ORDER BY date_start DESC`
+	params := []interface{}{IDManager}
+	rows, err := db.QueryContext(ctx, query, params...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		err = rows.Scan(&p.DateStart, &p.DateEnd, &p.Team, &p.GP, &p.W, &p.WO, &p.WS, &p.LS, &p.LO, &p.L, &p.TrophyNum)
+		if err != nil {
+			return nil, err
+		}
+		p.TeamID, err = get.TeamIDByTeamName(ctx, p.Team)
+		if err != nil {
+			return nil, err
+		}
 		res = append(res, p)
 	}
-	return res
+	return res, nil
 }
 
 func CheckProfileExist(r *http.Request, ID int) bool {

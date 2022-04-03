@@ -122,6 +122,7 @@ func FreeTeamsList(r *http.Request, keys map[string][]string) (res result.Result
 		res = result.SetErrorResult(report.UnknownError)
 		return
 	}
+	defer rows.Close()
 	for rows.Next() {
 		var f FreeTeamsItem
 		err = rows.Scan(&f.ID, &f.Name, &f.Country, &f.Cash, &f.AverageStr, &f.Str, &f.Cost, &f.Price, &f.SellType)
@@ -230,7 +231,7 @@ func AddFilters(r *http.Request, keys map[string][]string) (FilterStrings []Free
 		if err != nil {
 			res = result.SetErrorResult(`Ошибка в запросе(максимальная стоимость не является числом)`)
 			return
-		}
+		}	
 		FilterStrings = append(FilterStrings, ft)
 	}
 	if len(keys[`cost_min`]) > 0 {

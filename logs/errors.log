@@ -1440,3 +1440,103 @@ User-Agent: PostmanRuntime/7.29.0
 
 ERROR 2022/03/14 01:10:11 report.go:59: ——————————————————————————————————————————————————————————————————————
 ERROR 2022/03/14 01:10:11 report.go:60: 
+ERROR 2022/04/03 16:53:30 report.go:58: 03.04.2022 16:53:30
+D:/hm2/managers/profile.go:191
+sql: no rows in result set
+
+SELECT name, surname, sex, country, city, birthd, birthm, birthy, img from managers.data WHERE id=10
+
+&pq.Error{Severity:"", Code:"", Message:"", Detail:"", Hint:"", Position:"", InternalPosition:"", InternalQuery:"", Where:"", Schema:"", Table:"", Column:"", DataTypeName:"", Constraint:"", File:"", Line:"", Routine:""}
+
+GET /api/profile HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Cookie: cookie-name=MTY0ODk5NDAwNnxET011V0NlTFJDeWV4dUsxREZEdmZPRnktU2dKRnA5dU1lMGdOTHdtVEdTcVJtd0JzdnZQSmxJbnJJLXBNSVlhaVV5SzZVYlFZRUVRLWQyeW9GcnYwVE1UVUZBaXhOYlVfeTFJQUc1WkRESk54NVVSMDM5azFIWWVnMWRSLU1aazNJdV9uTFNoZ1Y0MTRxMVg1TGRHX21CeVhQSWh3QjN4cjBRR09RcHF3ak5QSmFhR2NrUkkzU0J0Ukx6UjdSNmhHTWtyLUs2V0dzUT18NKu7faR0QsG_67heFT3TfX4o3JBJYMpO-lPgTdLUmO8=
+Postman-Token: ec912983-47e0-4e3d-9312-7a2ba27d9cce
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/04/03 16:53:30 report.go:59: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/04/03 16:53:30 report.go:60: 
+ERROR 2022/04/03 16:59:10 report.go:58: 03.04.2022 16:59:10
+D:/hm2/managers/profile.go:192
+sql: no rows in result set
+
+SELECT name, surname, sex, country, city, birthd, birthm, birthy, img from managers.data WHERE id=10
+
+&pq.Error{Severity:"", Code:"", Message:"", Detail:"", Hint:"", Position:"", InternalPosition:"", InternalQuery:"", Where:"", Schema:"", Table:"", Column:"", DataTypeName:"", Constraint:"", File:"", Line:"", Routine:""}
+
+GET /api/profile HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Cookie: cookie-name=MTY0ODk5NDAwNnxET011V0NlTFJDeWV4dUsxREZEdmZPRnktU2dKRnA5dU1lMGdOTHdtVEdTcVJtd0JzdnZQSmxJbnJJLXBNSVlhaVV5SzZVYlFZRUVRLWQyeW9GcnYwVE1UVUZBaXhOYlVfeTFJQUc1WkRESk54NVVSMDM5azFIWWVnMWRSLU1aazNJdV9uTFNoZ1Y0MTRxMVg1TGRHX21CeVhQSWh3QjN4cjBRR09RcHF3ak5QSmFhR2NrUkkzU0J0Ukx6UjdSNmhHTWtyLUs2V0dzUT18NKu7faR0QsG_67heFT3TfX4o3JBJYMpO-lPgTdLUmO8=
+Postman-Token: e68e3537-ade6-4a31-8bda-4fe71b403129
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/04/03 16:59:10 report.go:59: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/04/03 16:59:10 report.go:60: 
+ERROR 2022/04/03 17:01:25 report.go:58: 03.04.2022 17:01:25
+D:/hm2/managers/profile.go:203
+pq: ошибка синтаксиса (примерное положение: "end")
+
+SELECT name, surname, sex, country, city, birthd, birthm, birthy, img from managers.data WHERE id=10
+
+&pq.Error{Severity:"ОШИБКА", Code:"42601", Message:"ошибка синтаксиса (примерное положение: \"end\")", Detail:"", Hint:"", Position:"15", InternalPosition:"", InternalQuery:"", Where:"", Schema:"", Table:"", Column:"", DataTypeName:"", Constraint:"", File:"scan.l", Line:"1180", Routine:"scanner_yyerror"}
+
+GET /api/profile HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Cookie: cookie-name=MTY0ODk5NDAwNnxET011V0NlTFJDeWV4dUsxREZEdmZPRnktU2dKRnA5dU1lMGdOTHdtVEdTcVJtd0JzdnZQSmxJbnJJLXBNSVlhaVV5SzZVYlFZRUVRLWQyeW9GcnYwVE1UVUZBaXhOYlVfeTFJQUc1WkRESk54NVVSMDM5azFIWWVnMWRSLU1aazNJdV9uTFNoZ1Y0MTRxMVg1TGRHX21CeVhQSWh3QjN4cjBRR09RcHF3ak5QSmFhR2NrUkkzU0J0Ukx6UjdSNmhHTWtyLUs2V0dzUT18NKu7faR0QsG_67heFT3TfX4o3JBJYMpO-lPgTdLUmO8=
+Postman-Token: 28ab08e8-0cae-4c8a-b2df-10eb3bd6c2d0
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/04/03 17:01:25 report.go:59: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/04/03 17:01:25 report.go:60: 
+ERROR 2022/04/03 17:02:47 report.go:58: 03.04.2022 17:02:47
+D:/hm2/managers/profile.go:202
+sql: Scan error on column index 1, name "date_finish": converting NULL to string is unsupported
+
+SELECT name, surname, sex, country, city, birthd, birthm, birthy, img from managers.data WHERE id=10
+
+&pq.Error{Severity:"", Code:"", Message:"", Detail:"", Hint:"", Position:"", InternalPosition:"", InternalQuery:"", Where:"", Schema:"", Table:"", Column:"", DataTypeName:"", Constraint:"", File:"", Line:"", Routine:""}
+
+GET /api/profile HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Cookie: cookie-name=MTY0ODk5NDAwNnxET011V0NlTFJDeWV4dUsxREZEdmZPRnktU2dKRnA5dU1lMGdOTHdtVEdTcVJtd0JzdnZQSmxJbnJJLXBNSVlhaVV5SzZVYlFZRUVRLWQyeW9GcnYwVE1UVUZBaXhOYlVfeTFJQUc1WkRESk54NVVSMDM5azFIWWVnMWRSLU1aazNJdV9uTFNoZ1Y0MTRxMVg1TGRHX21CeVhQSWh3QjN4cjBRR09RcHF3ak5QSmFhR2NrUkkzU0J0Ukx6UjdSNmhHTWtyLUs2V0dzUT18NKu7faR0QsG_67heFT3TfX4o3JBJYMpO-lPgTdLUmO8=
+Postman-Token: 4dcbb33c-7621-4ea5-8629-69307c4a4e87
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/04/03 17:02:47 report.go:59: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/04/03 17:02:47 report.go:60: 
+ERROR 2022/04/03 17:03:43 report.go:58: 03.04.2022 17:03:43
+D:/hm2/managers/profile.go:177
+sql: no rows in result set
+
+SELECT name, surname, sex, country, city, birthd, birthm, birthy, img from managers.data WHERE id=11
+
+&pq.Error{Severity:"", Code:"", Message:"", Detail:"", Hint:"", Position:"", InternalPosition:"", InternalQuery:"", Where:"", Schema:"", Table:"", Column:"", DataTypeName:"", Constraint:"", File:"", Line:"", Routine:""}
+
+GET /api/profile/11 HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Cache-Control: no-cache
+Connection: keep-alive
+Cookie: cookie-name=MTY0ODk5NDAwNnxET011V0NlTFJDeWV4dUsxREZEdmZPRnktU2dKRnA5dU1lMGdOTHdtVEdTcVJtd0JzdnZQSmxJbnJJLXBNSVlhaVV5SzZVYlFZRUVRLWQyeW9GcnYwVE1UVUZBaXhOYlVfeTFJQUc1WkRESk54NVVSMDM5azFIWWVnMWRSLU1aazNJdV9uTFNoZ1Y0MTRxMVg1TGRHX21CeVhQSWh3QjN4cjBRR09RcHF3ak5QSmFhR2NrUkkzU0J0Ukx6UjdSNmhHTWtyLUs2V0dzUT18NKu7faR0QsG_67heFT3TfX4o3JBJYMpO-lPgTdLUmO8=
+Postman-Token: 09c9a772-2471-476a-8955-861f9484013f
+User-Agent: PostmanRuntime/7.29.0
+
+ERROR 2022/04/03 17:03:43 report.go:59: ——————————————————————————————————————————————————————————————————————
+ERROR 2022/04/03 17:03:43 report.go:60: 
