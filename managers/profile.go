@@ -44,6 +44,8 @@ type ProfileManager struct {
 	Img        string                `json:"img"`
 	LastOnline string                `json:"last_online"`
 	Created    string                `json:"created"`
+	Cash       float64               `json:"cash"`
+	Rating     float64               `json:"rating"`
 	Teams      []ProfileManagerTeams `json:"teams"`
 }
 
@@ -210,8 +212,8 @@ func GetProfile(r *http.Request, ID int, user config.User) (res result.ResultInf
 	}
 	var d Date
 	var name, surname, country, city string
-	query = `SELECT name, surname, sex, country, city, birthd, birthm, birthy, img from managers.data WHERE id=$1`
-	err = db.QueryRowContext(ctx, query, ID).Scan(&name, &surname, &data.Sex, &country, &city, &d.Day, &d.Month, &d.Year, &data.Img)
+	query = `SELECT name, surname, sex, country, city, birthd, birthm, birthy, img, cash from managers.data WHERE id=$1`
+	err = db.QueryRowContext(ctx, query, ID).Scan(&name, &surname, &data.Sex, &country, &city, &d.Day, &d.Month, &d.Year, &data.Img, &data.Cash)
 	if err != nil {
 		switch {
 		case errors.Is(ctx.Err(), context.Canceled), errors.Is(ctx.Err(), context.DeadlineExceeded):
@@ -225,6 +227,7 @@ func GetProfile(r *http.Request, ID int, user config.User) (res result.ResultInf
 	data.Name = name + " " + surname
 	data.City = country + ", " + city
 	data.Birth = DateToString(d)
+	data.Rating = 234
 	data.Teams, err = FillTeamsTest(ctx, ID)
 	if err != nil {
 		switch {
