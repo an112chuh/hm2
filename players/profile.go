@@ -68,24 +68,28 @@ func GetPlayer(r *http.Request, IDPlayer int, user config.User) (res result.Resu
 	if p.Pos == 0 {
 		p.IsGK = true
 	}
+	var gs GKSkills
+	var s Skills
 	if p.IsGK {
 		query = `SELECT stick_handle, glove_handle, ricochet_control, fivehole, passing, reaction from players.gk_skills where player_id = $1`
 		params = []interface{}{IDPlayer}
-		err = db.QueryRow(query, params...).Scan(&p.GKSkills.StickHandle, &p.GKSkills.GloveHandle, &p.GKSkills.RicochetContrl, &p.GKSkills.FiveHole, &p.GKSkills.Passing, &p.GKSkills.Reaction)
+		err = db.QueryRow(query, params...).Scan(&gs.StickHandle, &gs.GloveHandle, &gs.RicochetContrl, &gs.FiveHole, &gs.Passing, &gs.Reaction)
 		if err != nil {
 			res = result.SetErrorResult(report.UnknownError)
 			report.ErrorSQLServer(r, err, query, params...)
 			return
 		}
+		p.GKSkills = &gs
 	} else {
 		query = `SELECT speed, skating, slap_shot, wrist_shot, tackling, blocking, passing, vision, agressiveness, resistance, faceoff, side from players.skills where player_id = $1`
 		params = []interface{}{IDPlayer}
-		err = db.QueryRow(query, params...).Scan(&p.Skills.Speed, &p.Skills.Skating, &p.Skills.SlapShot, &p.Skills.WristShot, &p.Skills.Tackling, &p.Skills.Blocking, &p.Skills.Passing, &p.Skills.Vision, &p.Skills.Agressiveness, &p.Skills.Resistance, &p.Skills.Faceoff, &p.Skills.Hand)
+		err = db.QueryRow(query, params...).Scan(&s.Speed, &s.Skating, &s.SlapShot, &s.WristShot, &s.Tackling, &s.Blocking, &s.Passing, &s.Vision, &s.Agressiveness, &s.Resistance, &s.Faceoff, &s.Hand)
 		if err != nil {
 			res = result.SetErrorResult(report.UnknownError)
 			report.ErrorSQLServer(r, err, query, params...)
 			return
 		}
+		p.Skills = &s
 	}
 	query = `SELECT team_name, GP, G, A, P, PIM, PM, SOG, SOfG, rating from players.history where player_id = $1 ORDER BY id desc `
 	params = []interface{}{IDPlayer}

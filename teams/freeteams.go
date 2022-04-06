@@ -183,9 +183,9 @@ func SortString(r *http.Request, keys map[string][]string) (string, error) {
 			res += "order by price "
 			IsSortable = true
 		case "buy_only":
-			res += "and is_auction = false"
+			res += "and is_auction = false "
 		case "auc_only":
-			res += "and is_auction = true"
+			res += "and is_auction = true "
 		default:
 			err = errors.New("данного параметра сортировки не существует")
 			return res, err
@@ -231,7 +231,7 @@ func AddFilters(r *http.Request, keys map[string][]string) (FilterStrings []Free
 		if err != nil {
 			res = result.SetErrorResult(`Ошибка в запросе(максимальная стоимость не является числом)`)
 			return
-		}	
+		}
 		FilterStrings = append(FilterStrings, ft)
 	}
 	if len(keys[`cost_min`]) > 0 {

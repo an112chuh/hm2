@@ -37,8 +37,8 @@ type Player struct {
 	Morale    int       `json:"morale"`
 	Tireness  int       `json:"tireness"`
 	Style     int       `json:"style"`
-	Skills    Skills    `json:"skills"`
-	GKSkills  GKSkills  `json:"gk_skills"`
+	Skills    *Skills   `json:"skills,omitempty"`
+	GKSkills  *GKSkills `json:"gk_skills,omitempty"`
 	History   []History `json:"history"`
 }
 
@@ -116,7 +116,7 @@ func CreatePlayers(r *http.Request, tx *sql.Tx, IDTeam int, NameTeam string, Cou
 		p.Style = ran(9)
 		if i < 3 {
 			p.Pos = 0
-			p.GKSkills = GenerateGoaliesStats(TeamAges[i])
+			*p.GKSkills = GenerateGoaliesStats(TeamAges[i])
 		} else if i < 8 {
 			p.Pos = 1
 			Stats = GenerateDefStats(TeamAges[i])

@@ -1,7 +1,6 @@
 package teams
 
 import (
-	"fmt"
 	"hm2/config"
 	"hm2/convert"
 	"hm2/managers"
@@ -15,15 +14,17 @@ import (
 )
 
 type Roster struct {
-	ID       int                      `json:"id"`
-	Name     string                   `json:"name"`
-	Manager  string                   `json:"manager"`
-	Country  string                   `json:"country"`
-	City     string                   `json:"city"`
-	Stadium  string                   `json:"stadium"`
-	Capacity int                      `json:"capacity"`
-	Cash     int                      `json:"cash"`
-	Players  []players.PlayerInRoster `json:"players"`
+	ID        int                      `json:"id"`
+	Name      string                   `json:"name"`
+	Manager   string                   `json:"manager"`
+	ManagerID int                      `json:"manager_id"`
+	Country   string                   `json:"country"`
+	CountryID int                      `json:"country_id"`
+	City      string                   `json:"city"`
+	Stadium   string                   `json:"stadium"`
+	Capacity  int                      `json:"capacity"`
+	Cash      int                      `json:"cash"`
+	Players   []players.PlayerInRoster `json:"players"`
 }
 
 func RosterHandler(w http.ResponseWriter, r *http.Request) {
@@ -44,7 +45,8 @@ func GetRoster(r *http.Request, IDTeam int, user config.User) (res result.Result
 	db := config.ConnectDB()
 	ctx := r.Context()
 	var roster Roster
-	query := `SELECT name, manager_id, country, city, stadium, capacity, cash from list.team_list WHERE id = $1`
+	query := `SELECT list.team_list.name, manager_id, country, city, stadium, capacity, cash from list.team_list
+	INNER JOIN teams.data on teams.data.team_id = list.team_list.id WHERE list.team_list.id = $1`
 	params := []interface{}{IDTeam}
 	var IDManager int
 	err := db.QueryRowContext(ctx, query, params...).Scan(&roster.Name, &IDManager, &roster.Country, &roster.City, &roster.Stadium, &roster.Capacity, &roster.Cash)
@@ -53,6 +55,7 @@ func GetRoster(r *http.Request, IDTeam int, user config.User) (res result.Result
 		res = result.SetErrorResult(report.UnknownError)
 		return
 	}
+	roster.ManagerID = IDManager
 	if IDManager > 0 {
 		var name, surname string
 		query = `SELECT name, surname from managers.data where id = $1`
@@ -64,6 +67,11 @@ func GetRoster(r *http.Request, IDTeam int, user config.User) (res result.Result
 			return
 		}
 		roster.Manager = name + " " + surname
+	}
+	roster.CountryID, err = convert.NationToInt(roster.Country)
+	if err != nil {
+		res = result.SetErrorResult(report.UnknownError)
+		return
 	}
 	var p players.PlayerInRoster
 	query = `SELECT list.players_list.id, name,
@@ -103,7 +111,6 @@ func GetRoster(r *http.Request, IDTeam int, user config.User) (res result.Result
 			return
 		}
 		roster.Players = append(roster.Players, p)
-		fmt.Println(len(roster.Players))
 	}
 	res.Done = true
 	res.Items = roster
