@@ -314,7 +314,7 @@ func GetProfileStats(r *http.Request, ID int, Page int, Limit int) (res result.R
 	}
 	res.Done = true
 	res.Items = data
-	res.Paginator = p
+	res.Paginator = &p
 	return
 }
 
