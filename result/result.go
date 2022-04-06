@@ -11,11 +11,11 @@ type ResultInfo struct {
 }
 
 type Paginator struct {
-	Total     uint64 `json:"total"`
-	CountPage uint   `json:"count_page"`
-	Page      uint   `json:"page"`
-	Offset    uint   `json:"offset"`
-	Limit     uint   `json:"limit"`
+	Total     int `json:"total"`
+	CountPage int `json:"count_page"`
+	Page      int `json:"page"`
+	Offset    int `json:"offset"`
+	Limit     int `json:"limit"`
 }
 
 func SetErrorResult(m string) (result ResultInfo) {

@@ -2,6 +2,7 @@ package convert
 
 import (
 	"hm2/config"
+	"hm2/report"
 )
 
 func NationToString(nat int) (string, error) {
@@ -10,6 +11,9 @@ func NationToString(nat int) (string, error) {
 	query := `SELECT short from list.nation_list where id = $1`
 	params := []interface{}{nat}
 	err := db.QueryRow(query, params...).Scan(&res)
+	if err != nil {
+		report.ErrorSQLServer(nil, err, query, params...)
+	}
 	return res, err
 }
 
@@ -19,6 +23,9 @@ func NationToLongString(nat int) (string, error) {
 	query := `SELECT name from list.nation_list where id = $1`
 	params := []interface{}{nat}
 	err := db.QueryRow(query, params...).Scan(&res)
+	if err != nil {
+		report.ErrorSQLServer(nil, err, query, params...)
+	}
 	return res, err
 }
 
@@ -46,5 +53,8 @@ func NationToInt(nat string) (int, error) {
 	query := `SELECT id from list.nation_list where name = $1`
 	params := []interface{}{nat}
 	err := db.QueryRow(query, params...).Scan(&res)
+	if err != nil {
+		report.ErrorSQLServer(nil, err, query, params...)
+	}
 	return res, err
 }

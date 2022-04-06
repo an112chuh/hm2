@@ -4,6 +4,7 @@ import (
 	"context"
 	"hm2/config"
 	"hm2/convert"
+	"hm2/report"
 	"strconv"
 )
 
@@ -14,6 +15,7 @@ func TeamsByManager(ctx context.Context, ID int) (TeamID []int, err error) {
 	params := []interface{}{ID}
 	err = db.QueryRowContext(ctx, query, params...).Scan(&TeamNum)
 	if err != nil {
+		report.ErrorSQLServer(nil, err, query, params...)
 		return nil, err
 	}
 	for i := 0; i < TeamNum; i++ {
@@ -22,6 +24,7 @@ func TeamsByManager(ctx context.Context, ID int) (TeamID []int, err error) {
 		params := []interface{}{ID}
 		err = db.QueryRowContext(ctx, query, params...).Scan(&Team)
 		if err != nil {
+			report.ErrorSQLServer(nil, err, query, params...)
 			return nil, err
 		}
 		TeamID = append(TeamID, Team)
@@ -37,6 +40,7 @@ func NationIDByTeam(ctx context.Context, TeamID int) (int, error) {
 	params := []interface{}{TeamID}
 	err := db.QueryRowContext(ctx, query, params...).Scan(&TeamString)
 	if err != nil {
+		report.ErrorSQLServer(nil, err, query, params...)
 		return -1, err
 	}
 	NationID, err = convert.NationToInt(TeamString)
@@ -53,6 +57,7 @@ func TeamIDByTeamName(ctx context.Context, TeamName string) (int, error) {
 	params := []interface{}{TeamName}
 	err := db.QueryRowContext(ctx, query, params...).Scan(&TeamID)
 	if err != nil {
+		report.ErrorSQLServer(nil, err, query, params...)
 		return -1, err
 	}
 	return TeamID, nil
