@@ -177,6 +177,31 @@ func EditProfileConfirmHandler(w http.ResponseWriter, r *http.Request) {
 	result.ReturnJSON(w, &res)
 }
 
+func ChangeCurrentTeamHandler(w http.ResponseWriter, r *http.Request) {
+	var res result.ResultInfo
+	user := IsLogin(w, r, true)
+	if !user.Authenticated {
+		return
+	}
+	keys := r.URL.Query()
+	var TeamNum int
+	var err error
+	if len(keys[`num`]) > 0 {
+		TeamNum, err = strconv.Atoi(keys[`num`][0])
+		if err != nil {
+			res = result.SetErrorResult(`Неверный параметр номера команды(не число)`)
+			result.ReturnJSON(w, &res)
+			return
+		}
+	} else {
+		res = result.SetErrorResult(`Необходим параметр num`)
+		result.ReturnJSON(w, &res)
+		return
+	}
+	res = ChangeCurrentTeam(r, TeamNum, user)
+	result.ReturnJSON(w, &res)
+}
+
 func GetProfile(r *http.Request, ID int, user config.User) (res result.ResultInfo) {
 	var data ProfileManager
 	db := config.ConnectDB()
@@ -410,6 +435,54 @@ func FillTeamsTest(ctx context.Context, IDManager int) (res []ProfileManagerTeam
 		res = append(res, p)
 	}
 	return res, nil
+}
+
+func ChangeCurrentTeam(r *http.Request, NewNum int, user config.User) (res result.ResultInfo) {
+	db := config.ConnectDB()
+	ctx := r.Context()
+	var TeamNum int
+	if NewNum > 3 || NewNum < 1 {
+		res = result.SetErrorResult(`Номер команды для смены должен быть от 1 до 3`)
+		return
+	}
+	query := `SELECT team_num from list.manager_list WHERE id = $1`
+	params := []interface{}{user.ID}
+	err := db.QueryRowContext(ctx, query, params...).Scan(&TeamNum)
+	if err != nil {
+		switch {
+		case errors.Is(ctx.Err(), context.Canceled), errors.Is(ctx.Err(), context.DeadlineExceeded):
+			res = result.SetErrorResult(report.CtxError)
+		default:
+			report.ErrorSQLServer(r, err, query, params...)
+			res = result.SetErrorResult(report.UnknownError)
+		}
+		return
+	}
+	if TeamNum < NewNum {
+		res = result.SetErrorResult(`У пользователя меньше команд, невозможно сменить команду`)
+		return
+	}
+	query = `UPDATE list.manager_list SET cur_team = $1 WHERE id = $2`
+	params = []interface{}{NewNum, user.ID}
+	_, err = db.ExecContext(ctx, query, params...)
+	if err != nil {
+		switch {
+		case errors.Is(ctx.Err(), context.Canceled), errors.Is(ctx.Err(), context.DeadlineExceeded):
+			res = result.SetErrorResult(report.CtxError)
+		default:
+			report.ErrorSQLServer(r, err, query, params...)
+			res = result.SetErrorResult(report.UnknownError)
+		}
+		return
+	}
+	CurTeamID, err := get.CurrentTeamByManager(ctx, user.ID)
+	if err != nil {
+		res = result.SetErrorResult(err.Error())
+		return
+	}
+	res.Done = true
+	res.Items = CurTeamID
+	return res
 }
 
 func CheckProfileExist(r *http.Request, ID int) bool {

@@ -3,6 +3,7 @@ package teams
 import (
 	"hm2/config"
 	"hm2/convert"
+	"hm2/get"
 	"hm2/managers"
 	"hm2/players"
 	"hm2/report"
@@ -15,6 +16,7 @@ import (
 
 type Roster struct {
 	ID        int                      `json:"id"`
+	IsOwned   bool                     `json:"is_owned"`
 	Name      string                   `json:"name"`
 	Manager   string                   `json:"manager"`
 	ManagerID int                      `json:"manager_id"`
@@ -38,7 +40,20 @@ func RosterHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func RosterManagedHandler(w http.ResponseWriter, r *http.Request) {
-
+	var res result.ResultInfo
+	user := managers.IsLogin(w, r, true)
+	if !user.Authenticated {
+		return
+	}
+	ctx := r.Context()
+	ID, err := get.CurrentTeamByManager(ctx, user.ID)
+	if err != nil {
+		res = result.SetErrorResult(err.Error())
+		result.ReturnJSON(w, &res)
+		return
+	}
+	res = GetRoster(r, ID, user)
+	result.ReturnJSON(w, &res)
 }
 
 func GetRoster(r *http.Request, IDTeam int, user config.User) (res result.ResultInfo) {
@@ -55,6 +70,12 @@ func GetRoster(r *http.Request, IDTeam int, user config.User) (res result.Result
 		res = result.SetErrorResult(report.UnknownError)
 		return
 	}
+	if IDManager == user.ID {
+		roster.IsOwned = true
+	} else {
+		roster.IsOwned = false
+	}
+	roster.ID = IDTeam
 	roster.ManagerID = IDManager
 	if IDManager > 0 {
 		var name, surname string

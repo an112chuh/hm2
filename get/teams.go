@@ -2,6 +2,7 @@ package get
 
 import (
 	"context"
+	"errors"
 	"hm2/config"
 	"hm2/convert"
 	"hm2/report"
@@ -58,6 +59,38 @@ func TeamIDByTeamName(ctx context.Context, TeamName string) (int, error) {
 	err := db.QueryRowContext(ctx, query, params...).Scan(&TeamID)
 	if err != nil {
 		report.ErrorSQLServer(nil, err, query, params...)
+		return -1, err
+	}
+	return TeamID, nil
+}
+
+func CurrentTeamByManager(ctx context.Context, IDManager int) (int, error) {
+	db := config.ConnectDB()
+	var CurTeamNum int
+	query := `SELECT cur_team FROM list.manager_list WHERE id = $1`
+	params := []interface{}{IDManager}
+	err := db.QueryRowContext(ctx, query, params...).Scan(&CurTeamNum)
+	if err != nil {
+		report.ErrorSQLServer(nil, err, query, params...)
+		return -1, err
+	}
+	if CurTeamNum < 1 || CurTeamNum > 3 {
+		err = errors.New(`номер текущей команды должен быть от 1 до 3`)
+		report.ErrorServer(nil, err)
+		return -1, err
+	}
+	CurTeamNumString := strconv.Itoa(CurTeamNum)
+	var TeamID int
+	query = `SELECT team` + CurTeamNumString + ` FROM list.manager_list WHERE id = $1`
+	params = []interface{}{IDManager}
+	err = db.QueryRowContext(ctx, query, params...).Scan(&TeamID)
+	if err != nil {
+		report.ErrorSQLServer(nil, err, query, params...)
+		return -1, err
+	}
+	if TeamID < 1 {
+		err = errors.New(`У менеджера меньше команд, чем указано`)
+		report.ErrorServer(nil, err)
 		return -1, err
 	}
 	return TeamID, nil

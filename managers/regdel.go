@@ -156,8 +156,10 @@ func CreateManager(r *http.Request, data ManagerReg) (res result.ResultInfo, ID 
 		, created_at
 		, last_online
 		, is_active
-		, vip)
-		VALUES ($1, $2, $3, 0, 0, 0, 0, 0, 1, $4, $5, TRUE, 0) RETURNING id`)
+		, vip
+		, team_num
+		, cur_team)
+		VALUES ($1, $2, $3, 0, 0, 0, 0, 0, 1, $4, $5, TRUE, 0, 0, 0) RETURNING id`)
 	params := []interface{}{data.Login, Hash, data.Mail, t, t}
 	err = tx.QueryRow(query, params...).Scan(&ID)
 	if err != nil {

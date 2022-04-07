@@ -66,7 +66,8 @@ func EditTeamsConfirmHandler(w http.ResponseWriter, r *http.Request) {
 func BuyTeam(r *http.Request, IDTeam int, user config.User) (res result.ResultInfo) {
 	db := config.ConnectDB()
 	ctx := r.Context()
-	var ManagerCoins, TeamPrice int
+	var ManagerCoins float64
+	var TeamPrice int
 	query := `SELECT cash from managers.data where id = $1`
 	params := []interface{}{user.ID}
 	err := db.QueryRowContext(ctx, query, params...).Scan(&ManagerCoins)
@@ -99,7 +100,7 @@ func BuyTeam(r *http.Request, IDTeam int, user config.User) (res result.ResultIn
 		res = result.SetErrorResult("Невозможно купить аукционную команду")
 		return
 	}
-	if ManagerCoins < TeamPrice {
+	if ManagerCoins < float64(TeamPrice) {
 		res = result.SetErrorResult("Не хватает средств для покупки команды")
 		return
 	}
@@ -240,7 +241,7 @@ func BuyTeam(r *http.Request, IDTeam int, user config.User) (res result.ResultIn
 		return
 	}
 	TeamNumString := strconv.Itoa(len(TeamNationsExist) + 1)
-	query = `UPDATE list.manager_list SET team` + TeamNumString + ` = $1, team_num = team_num + 1 WHERE id = $2`
+	query = `UPDATE list.manager_list SET team` + TeamNumString + ` = $1, cur_team = team_num + 1, team_num = team_num + 1 WHERE id = $2`
 	params = []interface{}{IDTeam, user.ID}
 	_, err = tx.ExecContext(ctx, query, params...)
 	if err != nil {
@@ -356,7 +357,7 @@ func SellTeam(r *http.Request, IDTeam int, user config.User) (res result.ResultI
 	defer func() {
 		_ = tx.Rollback()
 	}()
-	query = `UPDATE list.manager_list SET ` + queryString + `, team_num = team_num - 1 where id = $1`
+	query = `UPDATE list.manager_list SET ` + queryString + `, cur_team = team_num - 1, team_num = team_num - 1 where id = $1`
 	params = []interface{}{user.ID}
 	_, err = tx.ExecContext(ctx, query, params...)
 	if err != nil {

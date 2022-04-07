@@ -15,7 +15,7 @@ func GetManagerHandlers(r *mux.Router) {
 func GetManagerChangeHandlers(r *mux.Router) {
 	r.HandleFunc("/api/register", managers.RegManagerHandler).Methods("POST")
 	r.HandleFunc("/api/delete", managers.DeleteManagerHandler)
-
+	r.HandleFunc("/api/change_team", managers.ChangeCurrentTeamHandler).Methods("GET")
 }
 
 func GetManagerAuthHandlers(r *mux.Router) {
