@@ -1,6 +1,8 @@
 package teams
 
 import (
+	"context"
+	"errors"
 	"hm2/config"
 	"hm2/convert"
 	"hm2/get"
@@ -34,7 +36,12 @@ func RosterHandler(w http.ResponseWriter, r *http.Request) {
 	user := managers.IsLogin(w, r, false)
 	vars := mux.Vars(r)
 	id := vars["id"]
-	ID, _ := strconv.Atoi(id)
+	ID, err := strconv.Atoi(id)
+	if err != nil {
+		res = result.SetErrorResult(`Неверный параметр id команды`)
+		result.ReturnJSON(w, &res)
+		return
+	}
 	res = GetRoster(r, ID, user)
 	result.ReturnJSON(w, &res)
 }
@@ -60,14 +67,37 @@ func GetRoster(r *http.Request, IDTeam int, user config.User) (res result.Result
 	db := config.ConnectDB()
 	ctx := r.Context()
 	var roster Roster
-	query := `SELECT list.team_list.name, manager_id, country, city, stadium, capacity, cash from list.team_list
-	INNER JOIN teams.data on teams.data.team_id = list.team_list.id WHERE list.team_list.id = $1`
+	var exists bool
+	query := `SELECT EXISTS(SELECT 1 FROM list.team_list WHERE id = $1)`
 	params := []interface{}{IDTeam}
-	var IDManager int
-	err := db.QueryRowContext(ctx, query, params...).Scan(&roster.Name, &IDManager, &roster.Country, &roster.City, &roster.Stadium, &roster.Capacity, &roster.Cash)
+	err := db.QueryRowContext(ctx, query, params...).Scan(&exists)
 	if err != nil {
-		report.ErrorSQLServer(r, err, query, params...)
-		res = result.SetErrorResult(report.UnknownError)
+		switch {
+		case errors.Is(ctx.Err(), context.Canceled), errors.Is(ctx.Err(), context.DeadlineExceeded):
+			res = result.SetErrorResult(report.CtxError)
+		default:
+			report.ErrorSQLServer(r, err, query, params...)
+			res = result.SetErrorResult(report.UnknownError)
+		}
+		return
+	}
+	if !exists {
+		res = result.SetErrorResult(`Данной команды не существует`)
+		return
+	}
+	query = `SELECT list.team_list.name, manager_id, country, city, stadium, capacity, cash from list.team_list
+	INNER JOIN teams.data on teams.data.team_id = list.team_list.id WHERE list.team_list.id = $1`
+	params = []interface{}{IDTeam}
+	var IDManager int
+	err = db.QueryRowContext(ctx, query, params...).Scan(&roster.Name, &IDManager, &roster.Country, &roster.City, &roster.Stadium, &roster.Capacity, &roster.Cash)
+	if err != nil {
+		switch {
+		case errors.Is(ctx.Err(), context.Canceled), errors.Is(ctx.Err(), context.DeadlineExceeded):
+			res = result.SetErrorResult(report.CtxError)
+		default:
+			report.ErrorSQLServer(r, err, query, params...)
+			res = result.SetErrorResult(report.UnknownError)
+		}
 		return
 	}
 	if IDManager == user.ID {
@@ -83,8 +113,13 @@ func GetRoster(r *http.Request, IDTeam int, user config.User) (res result.Result
 		params = []interface{}{IDManager}
 		err = db.QueryRowContext(ctx, query, params...).Scan(&name, &surname)
 		if err != nil {
-			report.ErrorSQLServer(r, err, query, params...)
-			res = result.SetErrorResult(report.UnknownError)
+			switch {
+			case errors.Is(ctx.Err(), context.Canceled), errors.Is(ctx.Err(), context.DeadlineExceeded):
+				res = result.SetErrorResult(report.CtxError)
+			default:
+				report.ErrorSQLServer(r, err, query, params...)
+				res = result.SetErrorResult(report.UnknownError)
+			}
 			return
 		}
 		roster.Manager = name + " " + surname
@@ -110,9 +145,16 @@ func GetRoster(r *http.Request, IDTeam int, user config.User) (res result.Result
 	params = []interface{}{IDTeam}
 	rows, err := db.QueryContext(ctx, query, params...)
 	if err != nil {
-		report.ErrorSQLServer(r, err, query, params...)
-		res = result.SetErrorResult(report.UnknownError)
-		return
+		if err != nil {
+			switch {
+			case errors.Is(ctx.Err(), context.Canceled), errors.Is(ctx.Err(), context.DeadlineExceeded):
+				res = result.SetErrorResult(report.CtxError)
+			default:
+				report.ErrorSQLServer(r, err, query, params...)
+				res = result.SetErrorResult(report.UnknownError)
+			}
+			return
+		}
 	}
 	defer rows.Close()
 	for rows.Next() {

@@ -1,6 +1,8 @@
 package players
 
 import (
+	"context"
+	"errors"
 	"hm2/config"
 	"hm2/convert"
 	"hm2/managers"
@@ -40,27 +42,55 @@ func PlayerHandler(w http.ResponseWriter, r *http.Request) {
 	user := managers.IsLogin(w, r, false)
 	vars := mux.Vars(r)
 	id := vars["id"]
-	ID, _ := strconv.Atoi(id)
+	ID, err := strconv.Atoi(id)
+	if err != nil {
+		res = result.SetErrorResult(`Неверный id игрока`)
+		result.ReturnJSON(w, &res)
+		return
+	}
 	res = GetPlayer(r, ID, user)
 	result.ReturnJSON(w, &res)
 }
 
 func GetPlayer(r *http.Request, IDPlayer int, user config.User) (res result.ResultInfo) {
 	var p Player
+	ctx := r.Context()
 	db := config.ConnectDB()
 	p.Id = IDPlayer
-	query := `SELECT team_id, name, surname, pos, nat, age, str, style, morale, readyness, tireness, price from list.players_list where id = $1`
+	var exists bool
+	query := `SELECT EXISTS(SELECT 1 FROM list.players_list WHERE id = $1)`
 	params := []interface{}{IDPlayer}
-	err := db.QueryRow(query, params...).Scan(&p.TeamID, &p.Name, &p.Surname, &p.Pos, &p.Nat, &p.Age, &p.Str, &p.Style, &p.Morale, &p.Readyness, &p.Tireness, &p.Price)
+	err := db.QueryRowContext(ctx, query, params...).Scan(&exists)
 	if err != nil {
-		res = result.SetErrorResult(report.UnknownError)
-		report.ErrorSQLServer(r, err, query, params...)
+		switch {
+		case errors.Is(ctx.Err(), context.Canceled), errors.Is(ctx.Err(), context.DeadlineExceeded):
+			res = result.SetErrorResult(report.CtxError)
+		default:
+			report.ErrorSQLServer(r, err, query, params...)
+			res = result.SetErrorResult(report.UnknownError)
+		}
+		return
+	}
+	if !exists {
+		res = result.SetErrorResult(`Данного игрока не существует`)
+		return
+	}
+	query = `SELECT team_id, name, surname, pos, nat, age, str, style, morale, readyness, tireness, price from list.players_list where id = $1`
+	params = []interface{}{IDPlayer}
+	err = db.QueryRowContext(ctx, query, params...).Scan(&p.TeamID, &p.Name, &p.Surname, &p.Pos, &p.Nat, &p.Age, &p.Str, &p.Style, &p.Morale, &p.Readyness, &p.Tireness, &p.Price)
+	if err != nil {
+		switch {
+		case errors.Is(ctx.Err(), context.Canceled), errors.Is(ctx.Err(), context.DeadlineExceeded):
+			res = result.SetErrorResult(report.CtxError)
+		default:
+			report.ErrorSQLServer(r, err, query, params...)
+			res = result.SetErrorResult(report.UnknownError)
+		}
 		return
 	}
 	p.NatString, err = convert.NationToString(p.Nat)
 	if err != nil {
 		res = result.SetErrorResult(report.UnknownError)
-		report.ErrorSQLServer(r, err, query, params...)
 		return
 	}
 	p.PosString = convert.PosToString(p.Pos)
@@ -73,30 +103,45 @@ func GetPlayer(r *http.Request, IDPlayer int, user config.User) (res result.Resu
 	if p.IsGK {
 		query = `SELECT stick_handle, glove_handle, ricochet_control, fivehole, passing, reaction from players.gk_skills where player_id = $1`
 		params = []interface{}{IDPlayer}
-		err = db.QueryRow(query, params...).Scan(&gs.StickHandle, &gs.GloveHandle, &gs.RicochetContrl, &gs.FiveHole, &gs.Passing, &gs.Reaction)
+		err = db.QueryRowContext(ctx, query, params...).Scan(&gs.StickHandle, &gs.GloveHandle, &gs.RicochetContrl, &gs.FiveHole, &gs.Passing, &gs.Reaction)
 		if err != nil {
-			res = result.SetErrorResult(report.UnknownError)
-			report.ErrorSQLServer(r, err, query, params...)
+			switch {
+			case errors.Is(ctx.Err(), context.Canceled), errors.Is(ctx.Err(), context.DeadlineExceeded):
+				res = result.SetErrorResult(report.CtxError)
+			default:
+				report.ErrorSQLServer(r, err, query, params...)
+				res = result.SetErrorResult(report.UnknownError)
+			}
 			return
 		}
 		p.GKSkills = &gs
 	} else {
 		query = `SELECT speed, skating, slap_shot, wrist_shot, tackling, blocking, passing, vision, agressiveness, resistance, faceoff, side from players.skills where player_id = $1`
 		params = []interface{}{IDPlayer}
-		err = db.QueryRow(query, params...).Scan(&s.Speed, &s.Skating, &s.SlapShot, &s.WristShot, &s.Tackling, &s.Blocking, &s.Passing, &s.Vision, &s.Agressiveness, &s.Resistance, &s.Faceoff, &s.Hand)
+		err = db.QueryRowContext(ctx, query, params...).Scan(&s.Speed, &s.Skating, &s.SlapShot, &s.WristShot, &s.Tackling, &s.Blocking, &s.Passing, &s.Vision, &s.Agressiveness, &s.Resistance, &s.Faceoff, &s.Hand)
 		if err != nil {
-			res = result.SetErrorResult(report.UnknownError)
-			report.ErrorSQLServer(r, err, query, params...)
+			switch {
+			case errors.Is(ctx.Err(), context.Canceled), errors.Is(ctx.Err(), context.DeadlineExceeded):
+				res = result.SetErrorResult(report.CtxError)
+			default:
+				report.ErrorSQLServer(r, err, query, params...)
+				res = result.SetErrorResult(report.UnknownError)
+			}
 			return
 		}
 		p.Skills = &s
 	}
 	query = `SELECT team_name, GP, G, A, P, PIM, PM, SOG, SOfG, rating from players.history where player_id = $1 ORDER BY id desc `
 	params = []interface{}{IDPlayer}
-	rows, err := db.Query(query, params...)
+	rows, err := db.QueryContext(ctx, query, params...)
 	if err != nil {
-		res = result.SetErrorResult(report.UnknownError)
-		report.ErrorSQLServer(r, err, query, params...)
+		switch {
+		case errors.Is(ctx.Err(), context.Canceled), errors.Is(ctx.Err(), context.DeadlineExceeded):
+			res = result.SetErrorResult(report.CtxError)
+		default:
+			report.ErrorSQLServer(r, err, query, params...)
+			res = result.SetErrorResult(report.UnknownError)
+		}
 		return
 	}
 	ctr := 0
