@@ -4,6 +4,7 @@ import (
 	"encoding/gob"
 	"fmt"
 	"hm2/config"
+	"hm2/daemon"
 	"hm2/result"
 	"hm2/routes"
 	"net/http"
@@ -26,7 +27,7 @@ func main() {
 	config.InitDB(IsOpeningLocal, AdminName)
 	config.InitCookies()
 	config.InitLoggers()
-
+	go daemon.AuctionWorkerStart()
 	gob.Register(config.User{})
 
 	routeAll := mux.NewRouter()

@@ -64,6 +64,19 @@ func TeamIDByTeamName(ctx context.Context, TeamName string) (int, error) {
 	return TeamID, nil
 }
 
+func TeamNameByTeamID(ctx context.Context, TeamID int) (string, error) {
+	db := config.ConnectDB()
+	var TeamName string
+	query := `SELECT name FROM list.team_list where id = $1`
+	params := []interface{}{TeamID}
+	err := db.QueryRowContext(ctx, query, params...).Scan(&TeamName)
+	if err != nil {
+		report.ErrorSQLServer(nil, err, query, params...)
+		return ``, err
+	}
+	return TeamName, nil
+}
+
 func CurrentTeamByManager(ctx context.Context, IDManager int) (int, error) {
 	db := config.ConnectDB()
 	var CurTeamNum int
