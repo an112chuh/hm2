@@ -2,6 +2,7 @@ package teams
 
 import (
 	"errors"
+	"fmt"
 	"hm2/check"
 	"hm2/config"
 	"hm2/constants"
@@ -82,39 +83,63 @@ func FreeTeamsList(r *http.Request, keys map[string][]string, page int, limit in
 	if len(keys[`name`]) > 0 {
 		NameExist = true
 	}
+	var p result.Paginator
+	p.Page = page
+	p.Limit = limit
+	p.Offset = (page - 1) * limit
+	queryCount := `SELECT COUNT(*) FROM teams.data inner join list.team_list on list.team_list.id = teams.data.team_id where manager_id = -1 `
 	queryString := `SELECT teams.data.team_id, teams.data.name, country, cash, avg_str, str, cost, price, is_auction from teams.data inner join list.team_list on list.team_list.id = teams.data.team_id where manager_id = -1 `
+	var queryAdd string
 	queryParams := []interface{}{}
 	if NameExist {
-		queryString += "and teams.data.name like ?"
+		queryAdd += "and teams.data.name like ? "
 		queryParams = append(queryParams, keys[`name`][0]+"%")
 	}
 	if len(FilterStrings) > 0 {
 		if len(FilterStrings[len(FilterStrings)-1].StringValues) == 0 {
 			for i := 0; i < len(FilterStrings); i++ {
-				queryString += "and " + FilterStrings[i].Filter + "? "
+				queryAdd += "and " + FilterStrings[i].Filter + "? "
 				queryParams = append(queryParams, FilterStrings[i].Value)
 			}
 		} else {
 			for i := 0; i < len(FilterStrings)-1; i++ {
-				queryString += "and " + FilterStrings[i].Filter + "? "
+				queryAdd += "and " + FilterStrings[i].Filter + "? "
 				queryParams = append(queryParams, FilterStrings[i].Value)
 			}
 			LastIndex := len(FilterStrings) - 1
-			queryString += "and "
+			queryAdd += "and "
 			for i := 0; i < len(FilterStrings[LastIndex].StringValues); i++ {
 				if i == 0 {
-					queryString += "("
+					queryAdd += "("
 				}
-				queryString += FilterStrings[LastIndex].Filter + "? "
+				queryAdd += FilterStrings[LastIndex].Filter + "? "
 				queryParams = append(queryParams, FilterStrings[LastIndex].StringValues[i])
 				if i != len(FilterStrings[LastIndex].StringValues)-1 {
-					queryString += "or "
+					queryAdd += "or "
 				} else {
-					queryString += ") "
+					queryAdd += ") "
 				}
 			}
 		}
 	}
+	queryCount += queryAdd
+	queryCount = db.Rebind(queryCount)
+	var count int
+	err := db.QueryRowContext(ctx, queryCount, queryParams...).Scan(&count)
+	if err != nil {
+		fmt.Println(queryParams...)
+		fmt.Println(queryCount)
+		report.ErrorSQLServer(r, err, queryCount, queryParams...)
+		res = result.SetErrorResult(report.UnknownError)
+		return
+	}
+	p.Total = count
+	if count%limit == 0 {
+		p.CountPage = count / limit
+	} else {
+		p.CountPage = count
+	}
+	queryString += queryAdd
 	SortString, err := SortString(r, keys)
 	if err != nil {
 		report.ErrorServer(r, err)
@@ -167,6 +192,7 @@ func FreeTeamsList(r *http.Request, keys map[string][]string, page int, limit in
 	}
 	res.Done = true
 	res.Items = ft
+	res.Paginator = &p
 	return
 }
 

@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"hash/fnv"
+	"hm2/check"
 	"hm2/config"
 	"hm2/report"
 	"hm2/result"
@@ -90,6 +91,26 @@ func EditPasswordHandler(w http.ResponseWriter, r *http.Request) {
 		report.ErrorServer(r, err)
 	}
 	res = EditPassword(r, data, user)
+	result.ReturnJSON(w, &res)
+}
+
+func ExistManagerHandler(w http.ResponseWriter, r *http.Request) {
+	var res result.ResultInfo
+	keys := r.URL.Query()
+	if len(keys[`login`]) > 0 {
+		exists, err := check.ManagerExistByNickName(keys[`login`][0])
+		if err != nil {
+			res = result.SetErrorResult(err.Error())
+			result.ReturnJSON(w, &res)
+			return
+		}
+		res.Done = true
+		res.Items = map[string]interface{}{"exists": exists}
+	} else {
+		res = result.SetErrorResult(`Требуется параметр login`)
+		result.ReturnJSON(w, &res)
+		return
+	}
 	result.ReturnJSON(w, &res)
 }
 
