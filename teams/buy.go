@@ -22,6 +22,13 @@ type ManagerTeams struct {
 	Team3 int `db:"team3"`
 }
 
+type AuctionInfoRecord struct {
+	ManagerID int       `json:"manager_id"`
+	Manager   string    `json:"manager"`
+	Bet       int       `json:"bet"`
+	BetTime   time.Time `json:"bet_time"`
+}
+
 func BuyTeamHandler(w http.ResponseWriter, r *http.Request) {
 	var res result.ResultInfo
 	user := managers.IsLogin(w, r, true)
@@ -83,12 +90,78 @@ func AucTeamHandler(w http.ResponseWriter, r *http.Request) {
 	result.ReturnJSON(w, &res)
 }
 
+func CurrentAucInfoHandler(w http.ResponseWriter, r *http.Request) {
+	var res result.ResultInfo
+	user := managers.IsLogin(w, r, true)
+	if !user.Authenticated {
+		res = result.SetErrorResult(`Вы не можете купить команду. Пожалуйста, войдите или создайте аккаунт`)
+		result.ReturnJSON(w, &res)
+		return
+	}
+	vars := mux.Vars(r)
+	idString := vars[`id`]
+	ID, _ := strconv.Atoi(idString)
+	res = GetAucInfo(r, ID)
+	result.ReturnJSON(w, &res)
+}
+
 func EditTeamsHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
 func EditTeamsConfirmHandler(w http.ResponseWriter, r *http.Request) {
 
+}
+
+func GetAucInfo(r *http.Request, IDTeam int) (res result.ResultInfo) {
+	db := config.ConnectDB()
+	var data []AuctionInfoRecord
+	ctx := r.Context()
+	var exists bool
+	query := `SELECT EXISTS(SELECT 1 FROM teams.auction WHERE team_id = $1 AND actual = TRUE)`
+	params := []interface{}{IDTeam}
+	err := db.QueryRowContext(ctx, query, params...).Scan(&exists)
+	if err != nil {
+		switch {
+		case errors.Is(ctx.Err(), context.Canceled), errors.Is(ctx.Err(), context.DeadlineExceeded):
+			res = result.SetErrorResult(report.CtxError)
+		default:
+			report.ErrorSQLServer(r, err, query, params...)
+			res = result.SetErrorResult(report.UnknownError)
+		}
+		return
+	}
+	if !exists {
+		res = result.SetErrorResult(`Действующего аукциона на данную команду не существует`)
+		return
+	}
+	query = `SELECT manager_id, bet, bet_time FROM teams.auction_history WHERE team_id = $1 AND actual = TRUE ORDER BY id desc`
+	rows, err := db.QueryContext(ctx, query, params...)
+	if err != nil {
+		report.ErrorServer(r, err)
+		res = result.SetErrorResult(report.UnknownError)
+		return
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var rec AuctionInfoRecord
+		err = rows.Scan(&rec.ManagerID, &rec.Bet, &rec.BetTime)
+		if err != nil {
+			report.ErrorServer(r, err)
+			res = result.SetErrorResult(report.UnknownError)
+			return
+		}
+		rec.Manager, err = get.ManagerByID(rec.ManagerID)
+		if err != nil {
+			report.ErrorServer(r, err)
+			res = result.SetErrorResult(report.UnknownError)
+			return
+		}
+		data = append(data, rec)
+	}
+	res.Done = true
+	res.Items = data
+	return
 }
 
 func BuyTeam(r *http.Request, IDTeam int, user config.User, IsAuc bool, bet int) (res result.ResultInfo) {
@@ -345,7 +418,7 @@ func BuyTeam(r *http.Request, IDTeam int, user config.User, IsAuc bool, bet int)
 		}
 	} else {
 		var EndTime *time.Time
-		query = `SELECT end_time FROM teams.auction WHERE team_id = $1`
+		query = `SELECT end_time FROM teams.auction WHERE team_id = $1 AND actual = true`
 		params = []interface{}{IDTeam}
 		err = db.QueryRowContext(ctx, query, params...).Scan(&EndTime)
 		if err != nil {
@@ -359,8 +432,8 @@ func BuyTeam(r *http.Request, IDTeam int, user config.User, IsAuc bool, bet int)
 			return
 		}
 		if EndTime == nil {
-			query = `UPDATE teams.auction SET manager_id = $1, bet = $2, start_time = $3, bet_time = $4, end_time = $5`
-			params = []interface{}{user.ID, bet, time.Now(), time.Now(), time.Now().Add(constants.AUCTION_LENGTH * time.Hour * 24)}
+			query = `UPDATE teams.auction SET manager_id = $1, bet = $2, start_time = $3, bet_time = $4, end_time = $5 WHERE team_id = $6 and actual = true`
+			params = []interface{}{user.ID, bet, time.Now(), time.Now(), time.Now().Add(constants.AUCTION_LENGTH * time.Hour * 24), IDTeam}
 			_, err = tx.ExecContext(ctx, query, params...)
 			if err != nil {
 				switch {
@@ -374,8 +447,8 @@ func BuyTeam(r *http.Request, IDTeam int, user config.User, IsAuc bool, bet int)
 			}
 		} else {
 			if EndTime.Before(time.Now().Add(constants.TIME_ADD_AFTER_BET * time.Hour)) {
-				query = `UPDATE teams.auction SET manager_id = $1, bet = $2, bet_time = $3, end_time = $4`
-				params = []interface{}{user.ID, bet, time.Now(), time.Now().Add(constants.TIME_ADD_AFTER_BET * time.Hour)}
+				query = `UPDATE teams.auction SET manager_id = $1, bet = $2, bet_time = $3, end_time = $4 WHERE team_id = $5 and actual = true`
+				params = []interface{}{user.ID, bet, time.Now(), time.Now().Add(constants.TIME_ADD_AFTER_BET * time.Hour), IDTeam}
 				_, err = tx.ExecContext(ctx, query, params...)
 				if err != nil {
 					switch {
@@ -388,8 +461,8 @@ func BuyTeam(r *http.Request, IDTeam int, user config.User, IsAuc bool, bet int)
 					return
 				}
 			}
-			query = `UPDATE teams.auction SET manager_id = $1, bet = $2, bet_time = $3`
-			params = []interface{}{user.ID, bet, time.Now()}
+			query = `UPDATE teams.auction SET manager_id = $1, bet = $2, bet_time = $3 WHERE team_id = $4 and actual = true`
+			params = []interface{}{user.ID, bet, time.Now(), IDTeam}
 			_, err = tx.ExecContext(ctx, query, params...)
 			if err != nil {
 				switch {

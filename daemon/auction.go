@@ -14,7 +14,7 @@ func AuctionWorkerStart() {
 	db := config.ConnectDB()
 	query := `SELECT teams.data.team_id FROM teams.data
 	INNER JOIN list.team_list ON teams.data.team_id = list.team_list.id 
-	WHERE is_auction = true AND manager_id < 0`
+	WHERE (is_auction = true AND is_started = true) AND manager_id < 0`
 	rows, err := db.QueryContext(context.Background(), query)
 	if err != nil {
 		report.ErrorSQLServer(nil, err, query, nil)
@@ -57,7 +57,7 @@ func AuctionWorkerStart() {
 			go AuctionWorkHandler(NewTeamID)
 		}
 		rows.Close()
-		time.Sleep(5 * time.Second)
+		time.Sleep(60 * time.Second)
 	}
 }
 
@@ -71,27 +71,24 @@ func AuctionWorkHandler(TeamID int) {
 		err := db.QueryRowContext(context.Background(), query, params...).Scan(&EndTime)
 		if err != nil {
 			report.ErrorSQLServer(nil, err, query, params...)
-			time.Sleep(10 * time.Second)
+			time.Sleep(60 * time.Second)
 			continue
 		}
 		if EndTime == nil {
-			time.Sleep(10 * time.Second)
+			time.Sleep(60 * time.Second)
 			continue
 		}
 		CurrentTime := time.Now()
-		fmt.Println(CurrentTime)
-		fmt.Println(EndTime)
 		if CurrentTime.After(*EndTime) {
 			DiscardChanges(TeamID)
 			break
 		}
-		time.Sleep(10 * time.Second)
+		time.Sleep(60 * time.Second)
 	}
 }
 
 func DiscardChanges(TeamID int) {
 	db := config.ConnectDB()
-	fmt.Println("here")
 	tx, err := db.Begin()
 	if err != nil {
 		report.ErrorServer(nil, err)
@@ -153,6 +150,11 @@ func DiscardChanges(TeamID int) {
 		report.ErrorSQLServer(nil, err, query, params...)
 	}
 	query = `UPDATE teams.auction_history SET actual = false WHERE team_id = $1`
+	_, err = tx.ExecContext(context.Background(), query, params...)
+	if err != nil {
+		report.ErrorSQLServer(nil, err, query, params...)
+	}
+	query = `UPDATE teams.data SET is_started = false WHERE team_id = $1`
 	_, err = tx.ExecContext(context.Background(), query, params...)
 	if err != nil {
 		report.ErrorSQLServer(nil, err, query, params...)

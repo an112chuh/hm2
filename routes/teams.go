@@ -31,6 +31,7 @@ func GetBuyTeamsHandlers(r *mux.Router) {
 	r.HandleFunc("/api/roster/{id:[0-9]+}/buy", teams.BuyTeamHandler).Methods("GET")
 	r.HandleFunc("/api/roster/{id:[0-9]+}/sell", teams.SellTeamHandler).Methods("GET")
 	r.HandleFunc("/api/roster/{id:[0-9]+}/auc", teams.AucTeamHandler).Methods("GET")
+	r.HandleFunc("/api/roster/{id:[0-9]+}/auc_info", teams.CurrentAucInfoHandler).Methods("GET")
 	r.HandleFunc("/adm/api/team/edit", teams.EditTeamsHandler).Methods("GET")
 	r.HandleFunc("/adm/api/team/edit", teams.EditTeamsConfirmHandler).Methods("PUT")
 }
