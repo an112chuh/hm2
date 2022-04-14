@@ -2,6 +2,7 @@ package teams
 
 import (
 	"errors"
+	"hm2/check"
 	"hm2/config"
 	"hm2/constants"
 	"hm2/convert"
@@ -59,11 +60,17 @@ func FreeTeamsListHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	keys := r.URL.Query()
-	res = FreeTeamsList(r, keys)
+	mes, page, limit := check.Paginator(keys)
+	if mes != `` {
+		res = result.SetErrorResult(mes)
+		result.ReturnJSON(w, &res)
+		return
+	}
+	res = FreeTeamsList(r, keys, page, limit)
 	result.ReturnJSON(w, &res)
 }
 
-func FreeTeamsList(r *http.Request, keys map[string][]string) (res result.ResultInfo) {
+func FreeTeamsList(r *http.Request, keys map[string][]string, page int, limit int) (res result.ResultInfo) {
 	db := config.ConnectDB()
 	ctx := r.Context()
 	FilterStrings, res := AddFilters(r, keys)

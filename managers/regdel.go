@@ -2,7 +2,9 @@ package managers
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
+	"errors"
 	"hash/fnv"
 	"hm2/config"
 	"hm2/report"
@@ -15,10 +17,9 @@ import (
 )
 
 type ManagerReg struct {
-	Mail           string `json:"mail"`
-	Login          string `json:"login"`
-	Password       string `json:"password"`
-	PasswordRepeat string `json:"password_repeat"`
+	Mail     string `json:"mail,omitempty"`
+	Login    string `json:"login,omitempty"`
+	Password string `json:"password"`
 }
 
 func RegManagerHandler(w http.ResponseWriter, r *http.Request) {
@@ -43,7 +44,9 @@ func RegManagerHandler(w http.ResponseWriter, r *http.Request) {
 			report.ErrorServer(r, err)
 			res = result.SetErrorResult(`Внутренняя ошибка`)
 		}
-
+	} else {
+		result.ReturnJSON(w, &res)
+		return
 	}
 	config.InitUserLogger(user.ID)
 	result.ReturnJSON(w, &res)
@@ -71,11 +74,26 @@ func DeleteManagerHandler(w http.ResponseWriter, r *http.Request) {
 	result.ReturnJSON(w, &res)
 }
 
-func RegManager(r *http.Request, data ManagerReg) (res result.ResultInfo, user config.User) {
-	if data.Password != data.PasswordRepeat {
-		res = result.SetErrorResult(`Поля "пароль" и "введите пароль" не совпадают`)
+func EditPasswordHandler(w http.ResponseWriter, r *http.Request) {
+	var res result.ResultInfo
+	user := IsLogin(w, r, true)
+	if !user.Authenticated {
+		res = result.SetErrorResult("Требуется регистрация")
+		result.ReturnJSON(w, &res)
 		return
 	}
+	var data ManagerReg
+	b, _ := io.ReadAll(r.Body)
+	r.Body = io.NopCloser(bytes.NewReader(b))
+	err := json.Unmarshal(b, &data)
+	if err != nil {
+		report.ErrorServer(r, err)
+	}
+	res = EditPassword(r, data, user)
+	result.ReturnJSON(w, &res)
+}
+
+func RegManager(r *http.Request, data ManagerReg) (res result.ResultInfo, user config.User) {
 	if len(data.Login) > 30 || len(data.Mail) > 30 {
 		res = result.SetErrorResult(`Слишком длинные логин/почта, объём должен быть меньше 30 символов`)
 		return
@@ -182,6 +200,28 @@ func CreateManager(r *http.Request, data ManagerReg) (res result.ResultInfo, ID 
 		return
 	}
 	return res, ID
+}
+
+func EditPassword(r *http.Request, data ManagerReg, user config.User) (res result.ResultInfo) {
+	db := config.ConnectDB()
+	ctx := r.Context()
+	Hash := HashCreation(data.Password)
+	query := `UPDATE list.manager_list SET hash = $1 WHERE id = $2`
+	params := []interface{}{Hash, user.ID}
+	_, err := db.ExecContext(ctx, query, params...)
+	if err != nil {
+		switch {
+		case errors.Is(ctx.Err(), context.Canceled), errors.Is(ctx.Err(), context.DeadlineExceeded):
+			res = result.SetErrorResult(report.CtxError)
+		default:
+			report.ErrorSQLServer(r, err, query, params...)
+			res = result.SetErrorResult(report.UnknownError)
+		}
+		return
+	}
+	res.Done = true
+	res.Items = user.ID
+	return
 }
 
 func HashCreation(password string) uint32 {

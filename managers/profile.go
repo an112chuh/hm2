@@ -36,8 +36,10 @@ type ProfileManager struct {
 	IsOwned    bool                  `json:"is_owned"`
 	ID         int                   `json:"id"`
 	Name       string                `json:"name"`
+	Surname    string                `json:"surname"`
 	NickName   string                `json:"nickname"`
 	Sex        bool                  `json:"sex"`
+	Country    string                `json:"country"`
 	City       string                `json:"city"`
 	Birth      string                `json:"birth"`
 	Mail       string                `json:"mail"`
@@ -236,9 +238,8 @@ func GetProfile(r *http.Request, ID int, user config.User) (res result.ResultInf
 		data.LastOnline = last_online.Format("02.01.2006 15:04")
 	}
 	var d Date
-	var name, surname, country, city string
 	query = `SELECT name, surname, sex, country, city, birthd, birthm, birthy, img, cash from managers.data WHERE id=$1`
-	err = db.QueryRowContext(ctx, query, ID).Scan(&name, &surname, &data.Sex, &country, &city, &d.Day, &d.Month, &d.Year, &data.Img, &data.Cash)
+	err = db.QueryRowContext(ctx, query, ID).Scan(&data.Name, &data.Surname, &data.Sex, &data.Country, &data.City, &d.Day, &d.Month, &d.Year, &data.Img, &data.Cash)
 	if err != nil {
 		switch {
 		case errors.Is(ctx.Err(), context.Canceled), errors.Is(ctx.Err(), context.DeadlineExceeded):
@@ -249,8 +250,6 @@ func GetProfile(r *http.Request, ID int, user config.User) (res result.ResultInf
 		}
 		return
 	}
-	data.Name = name + " " + surname
-	data.City = country + ", " + city
 	data.Birth = DateToString(d)
 	data.Rating = 234
 	data.Teams, err = FillTeamsTest(ctx, ID)
