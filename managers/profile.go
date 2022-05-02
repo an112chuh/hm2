@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"hm2/check"
 	"hm2/config"
 	"hm2/convert"
@@ -12,8 +13,11 @@ import (
 	"hm2/report"
 	"hm2/result"
 	"io"
+	"io/ioutil"
 	"net/http"
+	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -204,6 +208,26 @@ func ChangeCurrentTeamHandler(w http.ResponseWriter, r *http.Request) {
 	result.ReturnJSON(w, &res)
 }
 
+func UploadImageHandler(w http.ResponseWriter, r *http.Request) {
+	var res result.ResultInfo
+	user := IsLogin(w, r, true)
+	if !user.Authenticated {
+		return
+	}
+	res = UploadImage(r, user.ID)
+	result.ReturnJSON(w, &res)
+}
+
+func DeleteImageHandler(w http.ResponseWriter, r *http.Request) {
+	var res result.ResultInfo
+	user := IsLogin(w, r, true)
+	if !user.Authenticated {
+		return
+	}
+	res = DeleteImage(r, user.ID)
+	result.ReturnJSON(w, &res)
+}
+
 func GetProfile(r *http.Request, ID int, user config.User) (res result.ResultInfo) {
 	var data ProfileManager
 	db := config.ConnectDB()
@@ -372,6 +396,68 @@ func EditProfile(r *http.Request, ID int) (res result.ResultInfo) {
 	res.Done = true
 	res.Items = data
 	return res
+}
+
+func UploadImage(r *http.Request, ID int) (res result.ResultInfo) {
+	form := r.MultipartForm
+	var FileName string
+	imgExt := `jpeg`
+	for key := range form.File {
+		FileName = key
+		arr := strings.Split(FileName, `.`)
+		if len(arr) > 1 {
+			imgExt = arr[len(arr)-1]
+		}
+		continue
+	}
+	file, _, err := r.FormFile(FileName)
+	if err != nil {
+		res = result.SetErrorResult(`Ошибка получения файла`)
+		return
+	}
+	defer file.Close()
+	fileBytes, err := ioutil.ReadAll(file)
+	if err != nil {
+		res = result.SetErrorResult(`Ошибка чтения файла`)
+		return
+	}
+	FullFileName := fmt.Sprintf("public/profile/%d.%s", ID, imgExt)
+	FileOnDisk, err := os.Create(FullFileName)
+	if err != nil {
+		res = result.SetErrorResult(`Ошибка создания файла на диске`)
+		return
+	}
+	defer FileOnDisk.Close()
+	_, err = FileOnDisk.Write(fileBytes)
+	if err != nil {
+		res = result.SetErrorResult(`Ошибка записи в файл`)
+		return
+	}
+	db := config.ConnectDB()
+	query := `UPDATE managers_data SET img = $1 WHERE id = $2`
+	params := []interface{}{ID, ID}
+	_, err = db.Exec(query, params...)
+	if err != nil {
+		res = result.SetErrorResult(`Ошибка обновления базы данных`)
+		return
+	}
+	res.Done = true
+	res.Items = map[string]interface{}{"Path": fmt.Sprintf("public/profile/%d.jpg", ID)}
+	return
+}
+
+func DeleteImage(r *http.Request, ID int) (res result.ResultInfo) {
+	db := config.ConnectDB()
+	query := `UPDATE managers_data SET img = '-1' WHERE id = $1`
+	params := []interface{}{ID}
+	_, err := db.Exec(query, params...)
+	if err != nil {
+		res = result.SetErrorResult(`Ошибка обновления базы данных`)
+		return
+	}
+	os.Remove(fmt.Sprintf(`public/profile/%d.jpg`, ID))
+	res.Done = true
+	return
 }
 
 func EditProfileConfirm(r *http.Request, data ProfileManagerEdit) (res result.ResultInfo) {

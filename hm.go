@@ -28,6 +28,9 @@ func main() {
 	config.InitCookies()
 	config.InitLoggers()
 	go daemon.AuctionWorkerStart()
+	//	go daemon.CommandLineStart()
+	//	_ = match.TestImportMatch(10, 9)
+	//	go daemon.GameDayWorkerStart()
 	gob.Register(config.User{})
 
 	routeAll := mux.NewRouter()

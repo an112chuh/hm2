@@ -14,6 +14,7 @@ func GetAllHandlers(r *mux.Router) {
 	GetManagerHandlers(r)
 	GetTeamHandlers(r)
 	GetPlayerHandlers(r)
+	GetStaticHandlers(r)
 }
 
 func NoAuthHandler(w http.ResponseWriter, r *http.Request) {
