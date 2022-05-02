@@ -19,6 +19,7 @@ func GetManagerChangeHandlers(r *mux.Router) {
 	r.HandleFunc("/api/edit_password", managers.EditPasswordHandler).Methods("PUT")
 	r.HandleFunc("/api/profile_exist", managers.ExistManagerHandler).Methods("GET")
 	r.HandleFunc("/api/profile/upload_image", managers.UploadImageHandler).Methods("POST")
+	r.HandleFunc("/api/profile/delete_image", managers.DeleteImageHandler)
 }
 
 func GetManagerAuthHandlers(r *mux.Router) {
