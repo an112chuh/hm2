@@ -1,6 +1,7 @@
 package players
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"hm2/constants"
@@ -90,7 +91,12 @@ func CreatePlayers(r *http.Request, tx *sql.Tx, IDTeam int, NameTeam string, Cou
 	var Stats [constants.NumOfSkills]int
 	query := `SELECT id, short FROM list.nation_list where name = $1`
 	params := []interface{}{Country}
-	ctx := r.Context()
+	var ctx context.Context
+	if r != nil {
+		ctx = r.Context()
+	} else {
+		ctx = context.Background()
+	}
 	err := tx.QueryRowContext(ctx, query, params...).Scan(&p.Nat, &p.NatString)
 	if err != nil {
 		report.ErrorSQLServer(r, err, query, params...)
@@ -108,6 +114,8 @@ func CreatePlayers(r *http.Request, tx *sql.Tx, IDTeam int, NameTeam string, Cou
 		TeamAges[i], TeamAges[j] = TeamAges[j], TeamAges[i]
 	})
 	p.TeamID = IDTeam
+	p.GKSkills = new(GKSkills)
+	p.Skills = new(Skills)
 	for i := 0; i < 31; i++ {
 		p.Name = NamesList[ran(len(NamesList))]
 		p.Surname = SurnamesList[ran(len(SurnamesList))]

@@ -2,7 +2,6 @@ package daemon
 
 import (
 	"context"
-	"fmt"
 	"hm2/config"
 	"hm2/get"
 	"hm2/report"
@@ -64,7 +63,7 @@ func AuctionWorkerStart() {
 func AuctionWorkHandler(TeamID int) {
 	for {
 		db := config.ConnectDB()
-		fmt.Println(TeamID)
+		//		fmt.Println(TeamID)
 		query := `SELECT end_time FROM teams.auction WHERE team_id = $1 and actual = true`
 		params := []interface{}{TeamID}
 		var EndTime *time.Time

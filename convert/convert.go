@@ -58,3 +58,15 @@ func NationToInt(nat string) (int, error) {
 	}
 	return res, err
 }
+
+func NationShortStringToLongString(nat string) (string, error) {
+	var res string
+	db := config.ConnectDB()
+	query := `SELECT name from list.nation_list WHERE short = $1`
+	params := []interface{}{nat}
+	err := db.QueryRow(query, params...).Scan(&res)
+	if err != nil {
+		report.ErrorSQLServer(nil, err, query, params...)
+	}
+	return res, err
+}

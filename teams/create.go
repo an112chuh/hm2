@@ -13,6 +13,7 @@ import (
 	"hm2/report"
 	"hm2/result"
 	"io"
+	"math/rand"
 	"net/http"
 )
 
@@ -62,11 +63,11 @@ func CreateTeamConfirmHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		report.ErrorServer(r, err)
 	}
-	res = CreateTeamConfirm(r, data)
+	res = CreateTeamConfirm(r, data, false)
 	result.ReturnJSON(w, &res)
 }
 
-func CreateTeamConfirm(r *http.Request, data CreateTeamData) (res result.ResultInfo) {
+func CreateTeamConfirm(r *http.Request, data CreateTeamData, IsDebug bool) (res result.ResultInfo) {
 	db := config.ConnectDB()
 	tx, err := db.Begin()
 	if err != nil {
@@ -76,7 +77,12 @@ func CreateTeamConfirm(r *http.Request, data CreateTeamData) (res result.ResultI
 	defer func() {
 		_ = tx.Rollback()
 	}()
-	ctx := r.Context()
+	var ctx context.Context
+	if r != nil {
+		ctx = r.Context()
+	} else {
+		ctx = context.Background()
+	}
 	IsCountryExist := CheckCountry(r, data.Country)
 	if !IsCountryExist {
 		res = result.SetErrorResult(`Данной страны не существует в списке стран`)
@@ -107,8 +113,24 @@ func CreateTeamConfirm(r *http.Request, data CreateTeamData) (res result.ResultI
 		res = result.SetErrorResult(`Ошибка при создании баз команд`)
 		return
 	}
-	query = `INSERT into teams.data (team_id, name, str, players_num, avg_str, cash, cost, price, is_auction) VALUES ($1, $2, $3, 31, $4, 1000000, 50000000, 5, true)`
-	params = []interface{}{IDTeam, data.Name, str, float64(str) / 31}
+	var cash, cost, price int
+	isauc := true
+	if !IsDebug {
+		cash = 1000000
+		cost = 50000000
+		price = 5
+	} else {
+		str = 1900 + rand.Intn(500)
+		cash = 800000 + rand.Intn(400000)
+		cost = 40000000 + rand.Intn(20000000)
+		price = rand.Intn(20)
+		tmp := rand.Intn(3)
+		if tmp == 0 || price == 0 {
+			isauc = false
+		}
+	}
+	query = `INSERT into teams.data (team_id, name, str, players_num, avg_str, cash, cost, price, is_auction) VALUES ($1, $2, $3, 31, $4, $5, $6, $7, $8)`
+	params = []interface{}{IDTeam, data.Name, str, float64(str) / 31, cash, cost, price, isauc}
 	_, err = tx.ExecContext(ctx, query, params...)
 	if err != nil {
 		switch {
