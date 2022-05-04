@@ -21,7 +21,9 @@ func CommandLineStart() {
 		} else {
 			s = strings.Replace(s, "\n", "", -1)
 		}
-		go CommandLineWorker(s)
+		if s != `` {
+			go CommandLineWorker(s)
+		}
 	}
 }
 

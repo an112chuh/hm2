@@ -17,7 +17,6 @@ import (
 	"net/http"
 	"os"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -399,18 +398,7 @@ func EditProfile(r *http.Request, ID int) (res result.ResultInfo) {
 }
 
 func UploadImage(r *http.Request, ID int) (res result.ResultInfo) {
-	form := r.MultipartForm
-	var FileName string
-	imgExt := `jpeg`
-	for key := range form.File {
-		FileName = key
-		arr := strings.Split(FileName, `.`)
-		if len(arr) > 1 {
-			imgExt = arr[len(arr)-1]
-		}
-		continue
-	}
-	file, _, err := r.FormFile(FileName)
+	file, _, err := r.FormFile("file")
 	if err != nil {
 		res = result.SetErrorResult(`Ошибка получения файла`)
 		return
@@ -421,7 +409,7 @@ func UploadImage(r *http.Request, ID int) (res result.ResultInfo) {
 		res = result.SetErrorResult(`Ошибка чтения файла`)
 		return
 	}
-	FullFileName := fmt.Sprintf("public/profile/%d.%s", ID, imgExt)
+	FullFileName := fmt.Sprintf("public/profile/%d.%s", ID, `jpg`)
 	FileOnDisk, err := os.Create(FullFileName)
 	if err != nil {
 		res = result.SetErrorResult(`Ошибка создания файла на диске`)
@@ -434,7 +422,7 @@ func UploadImage(r *http.Request, ID int) (res result.ResultInfo) {
 		return
 	}
 	db := config.ConnectDB()
-	query := `UPDATE managers_data SET img = $1 WHERE id = $2`
+	query := `UPDATE managers.data SET img = $1 WHERE id = $2`
 	params := []interface{}{ID, ID}
 	_, err = db.Exec(query, params...)
 	if err != nil {
@@ -448,7 +436,7 @@ func UploadImage(r *http.Request, ID int) (res result.ResultInfo) {
 
 func DeleteImage(r *http.Request, ID int) (res result.ResultInfo) {
 	db := config.ConnectDB()
-	query := `UPDATE managers_data SET img = '-1' WHERE id = $1`
+	query := `UPDATE managers.data SET img = '-1' WHERE id = $1`
 	params := []interface{}{ID}
 	_, err := db.Exec(query, params...)
 	if err != nil {
